@@ -10,10 +10,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171024005934) do
+ActiveRecord::Schema.define(version: 20171024030120) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "cards", force: :cascade do |t|
+    t.string "card_name"
+    t.integer "attack"
+    t.integer "defense"
+    t.string "type"
+    t.integer "stars"
+    t.string "attribute"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "games", force: :cascade do |t|
+    t.integer "graveyard_user1", default: [], array: true
+    t.integer "monster_field_user1", default: [], array: true
+    t.integer "spell_field_user1", default: [], array: true
+    t.integer "deck_user1", default: [], array: true
+    t.integer "current_hand_user1", default: [], array: true
+    t.integer "lifepoints_user1", default: [], array: true
+    t.integer "turn_counter_user1", default: [], array: true
+    t.integer "graveyard_user2", default: [], array: true
+    t.integer "monster_field_user2", default: [], array: true
+    t.integer "spell_field_user2", default: [], array: true
+    t.integer "deck_user2", default: [], array: true
+    t.integer "current_hand_user2", default: [], array: true
+    t.integer "lifepoints_user2", default: [], array: true
+    t.integer "turn_counter_user2", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "username"
