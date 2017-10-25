@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 
 
 var Test = React.createClass({
-    render: function() {
+    render() {
         return (
-            <h1>Hello</h1>
+            <div>
+                <h1>Hello, World!</h1>
+            </div>
         )
     }
-})
+});

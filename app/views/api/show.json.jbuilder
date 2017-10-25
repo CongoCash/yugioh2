@@ -1,1 +1,1 @@
-json.array! @cards, partial: 'apis/api', as: :card
+json.array! @cards, partial: 'api/api', as: :card
