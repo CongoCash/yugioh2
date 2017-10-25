@@ -26,21 +26,16 @@ class Deck extends Component {
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
-                    <div className="col-sm-1 hand6_p2">1</div>
-                    <div className="col-sm-1 hand5_p2">1</div>
-                    <div className="col-sm-1 hand4_p2">1</div>
-                    <div className="col-sm-1 hand3_p2">1</div>
-                    <div className="col-sm-1 hand2_p2">1</div>
-                    <div className="col-sm-1 hand1_p2">1</div>
+                    <div className="col-sm-6">{this.props.current_hand_player2}</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
-                    <div className="col-sm-1">1</div>
+                    <div className="col-sm-1">Lifepoints: {this.props.lifepoints_player2}</div>
                 </div>
                 <div className="row spell_p2">
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
-                    <div className="col-sm-1 deck_p2">1</div>
+                    <div className="col-sm-1 deck_p2">Deck</div>
                     <div className="col-sm-1 spell5_p2">1</div>
                     <div className="col-sm-1 spell4_p2">1</div>
                     <div className="col-sm-1 spell3_p2">1</div>
@@ -68,7 +63,7 @@ class Deck extends Component {
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
-                    <div className="col-sm-6">Section for phase and other info</div>
+                    <div className="col-sm-6">{this.props.current_phase}</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
@@ -77,12 +72,7 @@ class Deck extends Component {
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
-                    <div className="col-sm-1 fusion1_p1">1</div>
-                    <div className="col-sm-1 monster1_p1">1</div>
-                    <div className="col-sm-1 monster2_p1">1</div>
-                    <div className="col-sm-1 monster3_p1">1</div>
-                    <div className="col-sm-1 monster4_p1">1</div>
-                    <div className="col-sm-1 monster5_p1">1</div>
+                    <div className="col-sm-6">{this.props.monster_field_player1}</div>
                     <div className="col-sm-1 graveyard">1</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
@@ -91,13 +81,13 @@ class Deck extends Component {
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
-                    <div className="col-sm-1 fusion1_p1">1</div>
-                    <div className="col-sm-1 spell1_p1">1</div>
-                    <div className="col-sm-1 spell2_p1">1</div>
-                    <div className="col-sm-1 spell3_p1">1</div>
-                    <div className="col-sm-1 spell4_p1">1</div>
-                    <div className="col-sm-1 spell5_p1">1</div>
-                    <div onClick={this.props.draw} className="col-sm-1 deck_p1">1</div>
+                    <div className="col-sm-1 fusion1_p1">Fusion</div>
+                    <div className="col-sm-1 spell1_p1">Spell</div>
+                    <div className="col-sm-1 spell2_p1">Spell</div>
+                    <div className="col-sm-1 spell3_p1">Spell</div>
+                    <div className="col-sm-1 spell4_p1">Spell</div>
+                    <div className="col-sm-1 spell5_p1">Spell</div>
+                    <div onClick={this.props.draw} className="col-sm-1 deck_p1">Deck</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
                 </div>
@@ -110,7 +100,7 @@ class Deck extends Component {
                     </div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
-                    <div className="col-sm-1">1</div>
+                    <div className="col-sm-1">Lifepoints: {this.props.lifepoints_player1}</div>
                 </div>
             </div>
         )
