@@ -105,12 +105,9 @@ class Deck extends Component {
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
-                    <div className="col-sm-1 hand1_p1">1</div>
-                    <div className="col-sm-1 hand2_p1">1</div>
-                    <div className="col-sm-1 hand3_1">1</div>
-                    <div className="col-sm-1 hand4_1">1</div>
-                    <div className="col-sm-1 hand5_1">1</div>
-                    <div className="col-sm-1 hand6_1">1</div>
+                    <div className="col-sm-6">
+                        {this.props.current_hand_player1}
+                    </div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>

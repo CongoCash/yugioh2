@@ -17,10 +17,10 @@ class Game extends Component {
             current_hand_player1: [],
             current_hand_player2: [],
             current_turn: [1, 2],
-            monster_field_player1: [0, 0, 0, 0, 0],
-            monster_field_player2: [0, 0, 0, 0, 0],
-            spell_field_player1: [0, 0, 0, 0, 0],
-            spell_field_player2: [0, 0, 0, 0, 0],
+            monster_field_player1: [],
+            monster_field_player2: [],
+            spell_field_player1: [],
+            spell_field_player2: [],
             phase_player1: ['Draw Phase', 'Standby Phase', 'Main Phase 1', 'Battle Phase',
             'Main Phase 2', 'End Phase'],
             phase_player2: ['Draw Phase', 'Standby Phase', 'Main Phase 1', 'Battle Phase',
@@ -76,17 +76,12 @@ class Game extends Component {
     drawCard() {
         if (this.state.current_turn[0] === 1) {
             let new_card = this.state.deck_player1.shift()
-            // console.log(new_card)
-            // console.log(this.state.current_hand_player1)
             let new_deck = this.state.deck_player1
             let new_hand = this.state.current_hand_player1
-            // new_hand.push(new_card)
-            console.log(new_hand)
+            new_hand.push(new_card)
             this.setState({
                 current_hand_player1: new_hand,
                 deck_player1: new_deck
-            }, function() {
-                console.log(this.state.current_hand_player1)
             })
         }
 
@@ -99,6 +94,17 @@ class Game extends Component {
                 current_hand_player2: new_hand,
                 deck_player2: new_deck
             })
+        }
+    }
+
+    playMonsterCard() {
+        // let new_monster_field_player1 =
+        if (this.state.current_turn === 1) {
+            if (this.state.monster_field_player1.length < 5) {
+                this.setState({
+                    monster_field_player1: this.state.monster_field_player1.push()
+                })
+            }
         }
     }
 
@@ -116,6 +122,12 @@ class Game extends Component {
                         />
                         <Board
                             draw={this.drawCard.bind(this)}
+                            current_hand_player1 = {this.state.current_hand_player1
+                            .map((card) => {
+                                return (
+                                    <span onClick=""> {card.card_name} </span>
+                                )
+                            })}
                         />
                     </div>
                 </div>
