@@ -4,31 +4,24 @@ import Board from '../board/Board.js'
 import DecksModel from '../../models/Deck.js'
 
 class Game extends Component {
+    //move axios to board level
 
     constructor(){
         super()
         this.state = {
 
             all_cards: [],
-            lifepoints_player1: 8000,
-            lifepoints_player2: 8000,
-            graveyard_player1: [],
-            graveyard_player2: [],
-            deck_player1: [],
-            deck_player2: [],
-            current_hand_player1: [],
-            current_hand_player2: [],
+            lifepoints_player1: 8000, lifepoints_player2: 8000,
+            graveyard_player1: [], graveyard_player2: [],
+            deck_player1: [], deck_player2: [],
+            current_hand_player1: [], current_hand_player2: [],
             current_turn: [1, 2],
-            monster_field_player1: [],
-            monster_field_player2: [],
-            spell_field_player1: [],
-            spell_field_player2: [],
-            phase_index_player1: 0,
-            phase_index_player2: 2,
+            monster_field_player1: [], monster_field_player2: [],
+            spell_field_player1: [], spell_field_player2: [],
+            phase_index_player1: 0, phase_index_player2: 2,
             phase_player1: ['Draw Phase', 'Battle Phase', 'End Phase'],
             phase_player2: ['Draw Phase', 'Battle Phase', 'End Phase'],
-            attacker: "",
-            attacked: "",
+            attacker: 0, attacked: 0,
             // phase_player1: ['Draw Phase', 'Standby Phase', 'Main Phase 1', 'Battle Phase',
             //     'Main Phase 2', 'End Phase'],
             // phase_player2: ['Draw Phase', 'Standby Phase', 'Main Phase 1', 'Battle Phase',
@@ -36,35 +29,55 @@ class Game extends Component {
         }
     }
 
-    componentWillMount() {
-        this.fetchData()
+    checkIfBattlePhasePlayer1() {
+        if(this.state.phase_player1[this.state.phase_index_player1] === 'Battle Phase' && this.state.current_turn[0] === 1) {
+            return true
+        }
+        return false
     }
 
-    fetchData(){
-        var shuffle_player1 = require('shuffle-array')
-        var shuffle_player2 = require('shuffle-array')
-
-
-
-        DecksModel.all().then( (res) => {
-            this.setState({
-                deck_player1: shuffle_player1(res.data),
-                all_cards: res.data
-            }, function(){
-                this.setDeckPlayer1()
-            })
-        })
-
-        //Two calls to database because it wasn't shuffling
-        DecksModel.all().then( (res) => {
-            this.setState({
-                deck_player2: shuffle_player2(res.data)
-            }, function(){
-                this.setDeckPlayer2()
-            })
-        })
-
+    checkIfBattlePhasePlayer2() {
+        if(this.state.phase_player2[this.state.phase_index_player2] === 'Battle Phase' && this.state.current_turn[0] === 2) {
+            return true
+        }
+        return false
     }
+
+    getCardInfo(cardName) {
+        return this.state.all_cards.findIndex((card) => {
+            console.log(card)
+            return card.card_name === cardName
+        })
+    }
+
+    // componentWillMount() {
+    //     this.fetchData()
+    // }
+    //
+    // fetchData(){
+    //     var shuffle_player1 = require('shuffle-array')
+    //     var shuffle_player2 = require('shuffle-array')
+    //
+    //
+    //
+    //     DecksModel.all().then( (res) => {
+    //         this.setState({
+    //             deck_player1: shuffle_player1(res.data),
+    //             all_cards: res.data
+    //         }, function(){
+    //             this.setDeckPlayer1()
+    //         })
+    //     })
+    //
+    //     //Two calls to database because it wasn't shuffling
+    //     DecksModel.all().then( (res) => {
+    //         this.setState({
+    //             deck_player2: shuffle_player2(res.data)
+    //         }, function(){
+    //             this.setDeckPlayer2()
+    //         })
+    //     })
+    // }
 
     setDeckPlayer1() {
         let initial_hand_player1 = this.state.deck_player1.slice(0,5)
@@ -86,58 +99,74 @@ class Game extends Component {
 
     drawCardPlayer1() {
         if (this.state.current_turn[0] === 1 && this.state.phase_index_player1 === 0) {
-            console.log("draw")
             let new_card = this.state.deck_player1.shift()
             let new_deck = this.state.deck_player1
             let new_hand = this.state.current_hand_player1
             new_hand.push(new_card)
-            console.log(this.state.phase_index_player1)
             this.setState({
                 current_hand_player1: new_hand,
                 deck_player1: new_deck,
                 phase_index_player1: this.state.phase_index_player1+1
-            }, function() {
-                console.log(this.state.phase_index_player1)
             })
         }
     }
 
     drawCardPlayer2() {
         if (this.state.current_turn[0] === 2 && this.state.phase_index_player2 === 0) {
-            console.log("draw")
             let new_card = this.state.deck_player2.shift()
             let new_deck = this.state.deck_player2
             let new_hand = this.state.current_hand_player2
             new_hand.push(new_card)
-            console.log(this.state.phase_index_player2)
             this.setState({
                 current_hand_player2: new_hand,
                 deck_player2: new_deck,
                 phase_index_player2: this.state.phase_index_player2+1
-            }, function() {
-                console.log(this.state.phase_index_player2)
             })
         }
     }
 
     playMonsterCard(e) {
-        if (this.state.current_turn[0] === 1 && this.state.phase_player1[this.state.phase_index_player1] === 'Battle Phase') {
+        if (this.checkIfBattlePhasePlayer1()) {
             if (this.state.monster_field_player1.length < 5) {
                 this.state.monster_field_player1.push(e.target.innerHTML)
 
                 this.setState({
-                    //ask about how to target specific card that is played
                     monster_field_player1: this.state.monster_field_player1
                 })
 
-                this.state.current_hand_player1.forEach((card, index) => {
-                    if (card.card_name === e.target.innerHTML) {
-                        this.state.current_hand_player1.splice(index, 1)
-                        return
-                    }
+                let index = this.state.current_hand_player1.findIndex((card) => {
+                    return card.card_name === e.target.innerHTML
                 })
+
+                this.state.current_hand_player1.splice(index, 1)
             }
         }
+        else if (this.checkIfBattlePhasePlayer2()) {
+            if (this.state.monster_field_player2.length < 5) {
+                this.state.monster_field_player2.push(e.target.innerHTML)
+
+                this.setState({
+                    monster_field_player2: this.state.monster_field_player2
+                })
+
+                let index = this.state.current_hand_player2.findIndex((card) => {
+                    return card.card_name === e.target.innerHTML
+                })
+
+                this.state.current_hand_player2.splice(index, 1)
+            }
+        }
+    }
+
+    directAttack(e){
+        let attackerInfo = (this.getCardInfo(this.state.attacker.card_name))
+        console.log(attackerInfo)
+                // this.setState({
+                //     lifepoints_player2: this.state.lifepoints_player2 - card.attack
+                //
+                // }, function() {
+                //     console.log(this.state.lifepoints_player2)
+                // })
     }
 
     attack(e) {
@@ -152,35 +181,18 @@ class Game extends Component {
         }
     }
 
-    directAttack(e){
-        this.state.all_cards.forEach((card) => {
-            if (card.card_name === e.target.innerHTML) {
-                console.log(this.state.lifepoints_player2)
-                this.setState({
-                    lifepoints_player2: this.state.lifepoints_player2 - card.attack
-
-                }, function() {
-                    console.log(this.state.lifepoints_player2)
-                })
-            }
-        })
-    }
 
     getPhase() {
         if (this.state.current_turn[0] === 1) {
-            console.log(this.state.phase_player1[this.state.phase_index_player1])
             return 'Player 1: ' +  this.state.phase_player1[this.state.phase_index_player1]
-
         }
 
         else {
-            console.log(this.state.phase_player2[this.state.phase_index_player2])
             return 'Player 2: ' +  this.state.phase_player2[this.state.phase_index_player2]
         }
     }
 
     endPhase() {
-        console.log(this.state.phase_index_player1)
         if (this.state.current_turn[0] === 1) {
             if (this.state.phase_index_player1 < this.state.phase_player1.length-1) {
                 this.setState({
@@ -191,8 +203,6 @@ class Game extends Component {
                 this.setState({
                     current_turn: [2, 1],
                     phase_index_player2: 0
-                }, function() {
-                    console.log('player 2 ', this.state.phase_index_player2)
                 })
             }
         }
@@ -207,31 +217,79 @@ class Game extends Component {
                 this.setState({
                     current_turn: [1, 2],
                     phase_index_player1: 0
-                },  function() {
-                    console.log('player 1 ', this.state.phase_index_player1)
                 })
             }
         }
     }
 
-    attackButton() {
-        console.log("mmm")
-        // if (this.state.current_turn[0] === 1 && this.state.phase_player1[this.state.phase_index_player1] === 'Battle Phase') {
-            return <button>Attack</button>
-        // }
+    attackButton(e) {
+        if (this.checkIfBattlePhasePlayer1()){
+            var attackerCard = this.state.all_cards.find((card) => {
+                return card.card_name === this.state.attacker
+            });
+            var attackedCard = this.state.all_cards.find((card) => {
+                return card.card_name === this.state.attacked
+            });
+            this.setState({
+                attacker: attackerCard,
+                attacked: attackedCard
+            }, function () {
+                this.attack(e)
+            })
+        }
     }
 
-    selectAttacker(e) {
-        this.setState({
-            attacker: e.target.innerHTML
-        })
+    selectAttackerPlayer2(e) {
+        if (this.state.phase_player2[this.state.phase_index_player2] === "Battle Phase") {
+            this.setState({
+                attacker: e.target.innerHTML
+            })
+        }
+    }
+
+    selectAttackedByPlayer1(e) {
+        if (this.state.phase_player1[this.state.phase_index_player1] === "Battle Phase") {
+            this.setState({
+                attacked: e.target.innerHTML
+            })
+        }
+    }
+
+
+    selectAttackerPlayer1(e) {
+        if (this.state.phase_player1[this.state.phase_index_player1] === "Battle Phase") {
+            this.setState({
+                attacker: e.target.innerHTML
+            })
+        }
+    }
+
+    selectAttackedByPlayer2(e) {
+        if (this.state.phase_player2[this.state.phase_index_player2] === "Battle Phase") {
+            this.setState({
+                attacked: e.target.innerHTML
+            })
+        }
+    }
+
+
+    monsterFieldPlayer1(e) {
+        this.selectAttackerPlayer1(e)
+        this.selectAttackedByPlayer2(e)
+    }
+
+    monsterFieldPlayer2(e) {
+        this.selectAttackerPlayer2(e)
+        this.selectAttackedByPlayer1(e)
     }
 
 
 
     render() {
-        if (this.state.current_turn[0] === 1 && this.state.phase_player1[this.state.phase_index_player1] === 'Battle Phase') {
-            var attack1 = <button>Attack</button>
+        if (this.checkIfBattlePhasePlayer1()) {
+            var attack1 = <button onClick={(e) => this.attackButton(() => {
+                    console.log('zzz')
+            })}>Attack</button>
         }
 
         return(
@@ -257,7 +315,7 @@ class Game extends Component {
                             monster_field_player1 = {this.state.monster_field_player1
                             .map((monster) => {
                                 return (
-                                    <span onClick={(e) => this.selectAttacker(e)}>
+                                    <span onClick={(e) => this.monsterFieldPlayer1(e)}>
                                         {monster}
                                     </span>
                                 )
@@ -265,26 +323,8 @@ class Game extends Component {
                             monster_field_player2 = {this.state.monster_field_player2
                             .map((monster) => {
                                 return (
-                                    <span onClick={(e) => this.selectAttacker(e)}>
+                                    <span onClick={(e) => this.monsterFieldPlayer2(e)}>
                                         {monster}
-                                    </span>
-                                )
-                            })}
-                            current_hand_player1 = {this.state.current_hand_player1
-                            .map((card) => {
-                                return (
-                                    <span className="col-sm-2">
-                                        <span onClick={(e) => this.playMonsterCard(e)}>
-                                            {card.card_name}</span>
-                                    </span>
-                                )
-                            })}
-                            current_hand_player2 = {this.state.current_hand_player2
-                            .map((card) => {
-                                return (
-                                    <span className="col-sm-2">
-                                        <span onClick={(e) => this.playMonsterCard(e)}>
-                                            {card.card_name}</span>
                                     </span>
                                 )
                             })}
