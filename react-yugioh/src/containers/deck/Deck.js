@@ -41,7 +41,6 @@ class Deck extends Component {
             this.setState({
                 deck: shuffle(new_deck),
             }, function(){
-                console.log(this.state.deck, 'helo')
                 this.setDeck()
             })
         })
@@ -54,6 +53,8 @@ class Deck extends Component {
         this.setState({
             current_hand: initial_hand,
             deck: initial_deck
+        }, function() {
+            this.props.getCurrentHand(this.state.current_hand)
         })
     }
 
@@ -86,18 +87,34 @@ class Deck extends Component {
         this.props.updateHand(this.state.current_hand)
     }
 
+    updateHand(e) {
+        let index = this.state.current_hand.findIndex((card) => {
+            return card.join_id == e.target.id
+        })
+
+        let monster = this.state.current_hand.find((card) => {
+            return card.join_id == e.target.id
+        })
+
+        this.state.current_hand.splice(index, 1)
+        this.setState({
+            current_hand: this.state.current_hand
+        })
+        this.props.playMonster(monster)
+    }
+
     render() {
 
         return(
             <div>
-            <div className="col-sm-12">
+            <div className="col-sm-11">
                 {this.props.setAttack}
                 {this.props.setDefense}
                 {this.state.current_hand
                 .map((card) => {
                     return (
                         <span className="col-sm-2">
-                                <span id={card.join_id} onClick={(e) => this.props.setMonsterCard(e)}>
+                                <span id={card.join_id} onClick={(e) => this.updateHand(e)}>
                                     {card.card_name} </span>
 
                         </span>

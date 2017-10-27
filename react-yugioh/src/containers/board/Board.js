@@ -7,42 +7,34 @@ class Board extends Component {
         super()
         this.state = {
             current_hand_player1: [], current_hand_player2: [],
+            current_hand: [],
+            monster_field_player1: [], monster_field_player2: [],
         }
     }
 
-    playMonsterCard(e) {
-        console.log('mmmm')
-        if (this.checkIfBattlePhasePlayer1()) {
+    getCurrentHand(hand) {
+        this.setState({
+            current_hand: hand
+        })
+    }
+
+    playMonsterCard(monster) {
+        if (this.props.checkIfBattlePhasePlayer1()) {
             if (this.state.monster_field_player1.length < 5) {
-                this.state.monster_field_player1.push(e.target.innerHTML)
+                this.state.monster_field_player1.push(monster)
 
                 this.setState({
-                    monster_field_player1: this.state.monster_field_player1
+                    monster_field_player1: this.state.monster_field_player1,
                 })
-
-                let index = this.state.current_hand_player1.findIndex((card) => {
-                    return card.card_name === e.target.innerHTML
-                })
-
-                console.log(this.state.current_hand_player1)
-                this.state.current_hand_player1.splice(index, 1)
             }
         }
-        else if (this.checkIfBattlePhasePlayer2()) {
+        else if (this.props.checkIfBattlePhasePlayer2()) {
             if (this.state.monster_field_player2.length < 5) {
-                this.state.monster_field_player2.push(e.target.innerHTML)
+                this.state.monster_field_player2.push(monster)
 
                 this.setState({
-                    monster_field_player2: this.state.monster_field_player2
+                    monster_field_player2: this.state.monster_field_player2,
                 })
-
-                console.log(this.state.current_hand_player2)
-                console.log(e.target.innerHTML)
-                let index = this.state.current_hand_player2.findIndex((card) => {
-                    return card.card_name === e.target.innerHTML
-                })
-
-                this.state.current_hand_player2.splice(index, 1)
             }
         }
     }
@@ -51,7 +43,12 @@ class Board extends Component {
 
         return(
             <div className="container">
-                <Deck />
+                <div className="row">
+                    <Deck
+                        playMonster={this.playMonsterCard.bind(this)}
+                        getCurrentHand={this.getCurrentHand.bind(this)}
+                    />
+                </div>
                 <div className="row spell_p2">
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
@@ -68,9 +65,13 @@ class Board extends Component {
                 <div className="row monster_p2">
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
-                    <div className="col-sm-1">1</div>
                     <div className="col-sm-1 graveyard">Graveyard</div>
-                    <div className="col-sm-5">{this.props.monster_field_player2}</div>
+                    <div className="col-sm-6">
+                        {this.state.monster_field_player2.map((monster) => {
+                            return (
+                                <span className="col-sm-2">{monster.card_name}</span>
+                            )})}
+                    </div>
                     <div className="col-sm-1 fusion1_p2">Fusion</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
@@ -92,7 +93,12 @@ class Board extends Component {
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
-                    <div className="col-sm-6">{this.props.monster_field_player1}</div>
+                    <div className="col-sm-6">
+                        {this.state.monster_field_player1.map((monster) => {
+                            return (
+                                <span className="col-sm-2">{monster.card_name}</span>
+                            )})}
+                    </div>
                     <div className="col-sm-1 graveyard">Graveyard</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
@@ -111,7 +117,10 @@ class Board extends Component {
                     <div className="col-sm-1">1</div>
                 </div>
                 <div className="row">
-                    <Deck />
+                    <Deck
+                        playMonster={this.playMonsterCard.bind(this)}
+                        getCurrentHand={this.getCurrentHand.bind(this)}
+                    />
                 </div>
             </div>
         )

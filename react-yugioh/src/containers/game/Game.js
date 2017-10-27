@@ -243,9 +243,7 @@ class Game extends Component {
             <div className="container">
                 <div className="row">
                     <div className="col-sm-12 center-page">
-                        <div className="col-sm-2">Empty Area</div>
-                        <div className="col-sm-2">Empty Area</div>
-                        <div className="col-sm-1">Lifepoints: {this.state.lifepoints_player2}</div>
+                        <div className="col-sm-12">Lifepoints: {this.state.lifepoints_player2}</div>
                         <Board
                             //deck functions
                             player={'Player 1'} turn={this.state.current_turn}
@@ -262,6 +260,9 @@ class Game extends Component {
                             current_phase = {this.getPhase()}
                             end_phase = {this.endPhase.bind(this)}
                             current_hand_player2 = {this.state.current_hand_player2}
+                            checkIfBattlePhasePlayer1={this.checkIfBattlePhasePlayer1.bind(this)}
+                            checkIfBattlePhasePlayer2={this.checkIfBattlePhasePlayer2.bind(this)}
+
 
                             monster_field_player1 = {this.state.monster_field_player1
                             .map((monster) => {
@@ -280,13 +281,9 @@ class Game extends Component {
                                 )
                             })}
                         />
-                        <div className="row hand_p1">
-                            <div className="col-sm-1">1</div>
-                            <div className="col-sm-1">1</div>
-                            <div className="col-sm-1">1</div>
+                        <div className="row lifepoints">
 
-                            <div className="col-sm-1">1</div>
-                            <div className="col-sm-1">Lifepoints: {this.state.lifepoints_player1}</div>
+                            <div className="col-sm-12">Lifepoints: {this.state.lifepoints_player1}</div>
                         </div>
                     </div>
                 </div>
