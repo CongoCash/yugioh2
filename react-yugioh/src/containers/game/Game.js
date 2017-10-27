@@ -33,11 +33,11 @@ class Game extends Component {
     }
 
     fetchData() {
-        DecksModel.all().then( (res) => {
+        DecksModel.decks().then( (res) => {
             this.setState({
                 all_cards: res.data
             }, function(){
-                console.log(this.state.all_cards)
+                // console.log(this.state.all_cards)
             })
         })
     }
@@ -71,7 +71,6 @@ class Game extends Component {
     }
 
     updateHand(hand) {
-        console.log('fjfdsj')
         if (this.state.current_turn[0] === 1) {
             this.setState({
                 current_hand_player1: hand
@@ -92,10 +91,12 @@ class Game extends Component {
     }
 
     setMonsterCard(e) {
+        console.log('mmfdsfsd')
         console.log(e.target)
     }
 
     playMonsterCard(e) {
+        console.log('mmmm')
         if (this.checkIfBattlePhasePlayer1()) {
             if (this.state.monster_field_player1.length < 5) {
                 this.state.monster_field_player1.push(e.target.innerHTML)

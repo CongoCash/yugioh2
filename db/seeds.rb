@@ -27,6 +27,13 @@ Card.create([
     id: 4,
   },
   {
+    card_name: "Kuriboh",
+    attack: 200,
+    defense: 300,
+    selected: false,
+    id: 5,
+  },
+  {
     card_name: "Summoned Skull",
     attack: 2500,
     defense: 2000,
@@ -75,13 +82,6 @@ Card.create([
     selected: false,
     id: 12,
   },
-  {
-    card_name: "Great White",
-    attack: 800,
-    defense: 1000,
-    selected: false,
-    id: 13,
-  }
 ])
 
 User.create({

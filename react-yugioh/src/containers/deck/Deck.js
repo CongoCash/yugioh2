@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import DecksModel from '../../models/Deck.js'
+import CardsModel from '../../models/Card.js'
 import './Deck.css'
 
 class Deck extends Component {
@@ -21,15 +22,32 @@ class Deck extends Component {
     fetchData(){
         var shuffle = require('shuffle-array')
 
-        DecksModel.all().then( (res) => {
+        CardsModel.cards().then( (res) => {
             this.setState({
-                deck: shuffle(res.data),
                 all_cards: res.data
-            }, function(){
-                this.setDeck()
-                console.log(this.state.all_cards)
             })
         })
+
+        DecksModel.decks().then( (res) => {
+            console.log(res.data)
+            let new_deck = []
+            res.data.forEach((data) => {
+                let new_card = this.state.all_cards.find((card) => {
+                    return card.id === data.cards_id
+                })
+                new_card["join_id"] = data.id
+                // new_deck.push()
+                new_deck.push(new_card)
+            })
+            // this.setState({
+            //     deck: new_deck,
+            // }, function(){
+            //     console.log(this.state.deck, 'helo')
+            //     this.setDeck()
+            // })
+            // console.log(new_deck)
+        })
+
     }
 
     setDeck() {
@@ -81,8 +99,8 @@ class Deck extends Component {
                 .map((card) => {
                     return (
                         <span className="col-sm-2">
-                                <span onClick={(e) => this.props.setMonsterCard(e)}>
-                                    {card.card_name}</span>
+                                <span className="" onClick={(e) => this.props.setMonsterCard(e)}>
+                                    {card.id} </span>
 
                         </span>
                     )

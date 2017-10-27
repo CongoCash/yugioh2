@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 class DecksModel {
-    static all(){
+    static decks(){
         let request = axios.get("http://localhost:3000/api/decks.json")
         return request
     }
