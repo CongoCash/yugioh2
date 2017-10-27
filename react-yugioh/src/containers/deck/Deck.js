@@ -71,15 +71,19 @@ class Deck extends Component {
     }
 
     render() {
+
         return(
             <div>
             <div className="col-sm-6">
+                {this.props.setAttack}
+                {this.props.setDefense}
                 {this.state.current_hand
                 .map((card) => {
                     return (
                         <span className="col-sm-2">
-                                <span onClick={(e) => this.props.playMonster(e)}>
+                                <span onClick={(e) => this.props.setMonsterCard(e)}>
                                     {card.card_name}</span>
+
                         </span>
                     )
                 })}

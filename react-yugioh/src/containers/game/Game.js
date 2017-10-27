@@ -91,6 +91,10 @@ class Game extends Component {
         })
     }
 
+    setMonsterCard(e) {
+        console.log(e.target)
+    }
+
     playMonsterCard(e) {
         if (this.checkIfBattlePhasePlayer1()) {
             if (this.state.monster_field_player1.length < 5) {
@@ -271,6 +275,7 @@ class Game extends Component {
             var attack1 = <button onClick={(e) => this.attackButton()}>Attack</button>
         }
 
+
         return(
             <div className="container">
                 <div className="row">
@@ -316,7 +321,9 @@ class Game extends Component {
                                 <Deck player={"Player 1"} updatePhaseTurn={this.updatePhaseTurn.bind(this)}
                                       turn={this.state.current_turn} phase={this.state.phase_index_player1}
                                       playMonster={this.playMonsterCard.bind(this)}
+                                      setMonsterCard={this.setMonsterCard.bind(this)}
                                       updateHand={this.updateHand.bind(this)}
+
                                 />
                             <div className="col-sm-1">1</div>
                             <div className="col-sm-1">Lifepoints: {this.state.lifepoints_player1}</div>
