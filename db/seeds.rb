@@ -1,4 +1,6 @@
 Card.destroy_all
+User.destroy_all
+Deck.destroy_all
 
 # yugi = Nokogiri::HTML(open('https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=1&sess=1&pid=13301000&rp=99999'))
 #

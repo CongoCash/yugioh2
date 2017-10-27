@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import Deck from '../deck/Deck.js'
 
 class Board extends Component {
 
@@ -10,10 +10,48 @@ class Board extends Component {
         }
     }
 
+    playMonsterCard(e) {
+        console.log('mmmm')
+        if (this.checkIfBattlePhasePlayer1()) {
+            if (this.state.monster_field_player1.length < 5) {
+                this.state.monster_field_player1.push(e.target.innerHTML)
+
+                this.setState({
+                    monster_field_player1: this.state.monster_field_player1
+                })
+
+                let index = this.state.current_hand_player1.findIndex((card) => {
+                    return card.card_name === e.target.innerHTML
+                })
+
+                console.log(this.state.current_hand_player1)
+                this.state.current_hand_player1.splice(index, 1)
+            }
+        }
+        else if (this.checkIfBattlePhasePlayer2()) {
+            if (this.state.monster_field_player2.length < 5) {
+                this.state.monster_field_player2.push(e.target.innerHTML)
+
+                this.setState({
+                    monster_field_player2: this.state.monster_field_player2
+                })
+
+                console.log(this.state.current_hand_player2)
+                console.log(e.target.innerHTML)
+                let index = this.state.current_hand_player2.findIndex((card) => {
+                    return card.card_name === e.target.innerHTML
+                })
+
+                this.state.current_hand_player2.splice(index, 1)
+            }
+        }
+    }
+
     render() {
 
         return(
             <div className="container">
+                <Deck />
                 <div className="row spell_p2">
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
@@ -71,6 +109,9 @@ class Board extends Component {
                     <div className="col-sm-1 spell5_p1">Spell</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
+                </div>
+                <div className="row">
+                    <Deck />
                 </div>
             </div>
         )

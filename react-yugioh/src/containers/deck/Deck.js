@@ -28,24 +28,22 @@ class Deck extends Component {
             })
         })
 
-        DecksModel.decks().then( (res) => {
-            console.log(res.data)
+        DecksModel.decks().then((res) => {
             let new_deck = []
             res.data.forEach((data) => {
                 let new_card = this.state.all_cards.find((card) => {
                     return card.id === data.cards_id
                 })
                 new_card["join_id"] = data.id
-                // new_deck.push()
+                new_deck.push()
                 new_deck.push(new_card)
             })
-            // this.setState({
-            //     deck: new_deck,
-            // }, function(){
-            //     console.log(this.state.deck, 'helo')
-            //     this.setDeck()
-            // })
-            // console.log(new_deck)
+            this.setState({
+                deck: shuffle(new_deck),
+            }, function(){
+                console.log(this.state.deck, 'helo')
+                this.setDeck()
+            })
         })
 
     }
@@ -92,15 +90,15 @@ class Deck extends Component {
 
         return(
             <div>
-            <div className="col-sm-6">
+            <div className="col-sm-12">
                 {this.props.setAttack}
                 {this.props.setDefense}
                 {this.state.current_hand
                 .map((card) => {
                     return (
                         <span className="col-sm-2">
-                                <span className="" onClick={(e) => this.props.setMonsterCard(e)}>
-                                    {card.id} </span>
+                                <span id={card.join_id} onClick={(e) => this.props.setMonsterCard(e)}>
+                                    {card.card_name} </span>
 
                         </span>
                     )

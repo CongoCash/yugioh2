@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Deck from '../deck/Deck.js'
 import Board from '../board/Board.js'
 import DecksModel from '../../models/Deck.js'
 
@@ -91,46 +90,9 @@ class Game extends Component {
     }
 
     setMonsterCard(e) {
-        console.log('mmfdsfsd')
-        console.log(e.target)
+        console.log(this.state)
     }
 
-    playMonsterCard(e) {
-        console.log('mmmm')
-        if (this.checkIfBattlePhasePlayer1()) {
-            if (this.state.monster_field_player1.length < 5) {
-                this.state.monster_field_player1.push(e.target.innerHTML)
-
-                this.setState({
-                    monster_field_player1: this.state.monster_field_player1
-                })
-
-                let index = this.state.current_hand_player1.findIndex((card) => {
-                    return card.card_name === e.target.innerHTML
-                })
-
-                console.log(this.state.current_hand_player1)
-                this.state.current_hand_player1.splice(index, 1)
-            }
-        }
-        else if (this.checkIfBattlePhasePlayer2()) {
-            if (this.state.monster_field_player2.length < 5) {
-                this.state.monster_field_player2.push(e.target.innerHTML)
-
-                this.setState({
-                    monster_field_player2: this.state.monster_field_player2
-                })
-
-                console.log(this.state.current_hand_player2)
-                console.log(e.target.innerHTML)
-                let index = this.state.current_hand_player2.findIndex((card) => {
-                    return card.card_name === e.target.innerHTML
-                })
-
-                this.state.current_hand_player2.splice(index, 1)
-            }
-        }
-    }
 
     directAttack(e){
         let attackerInfo = (this.getCardInfo(this.state.attacker.card_name))
@@ -282,15 +244,18 @@ class Game extends Component {
                 <div className="row">
                     <div className="col-sm-12 center-page">
                         <div className="col-sm-2">Empty Area</div>
-                        <Deck player={'Player 2'} turn={this.state.current_turn}
-                              phase_player2={this.state.phase_index_player2}
-                              updatePhaseTurn={this.updatePhaseTurn.bind(this)}
-                              playMonster={this.playMonsterCard.bind(this)}
-                              updateHand={this.updateHand.bind(this)}
-                        />
                         <div className="col-sm-2">Empty Area</div>
                         <div className="col-sm-1">Lifepoints: {this.state.lifepoints_player2}</div>
                         <Board
+                            //deck functions
+                            player={'Player 1'} turn={this.state.current_turn}
+                            phase_player1={this.state.phase_index_player1}
+                            phase_player2={this.state.phase_index_player2}
+                            updatePhaseTurn={this.updatePhaseTurn.bind(this)}
+                            // playMonster={this.playMonsterCard.bind(this)}
+                            updateHand={this.updateHand.bind(this)}
+                            setMonsterCard={this.setMonsterCard.bind(this)}
+
                             attack = {attack1}
                             lifepoints_player1 = {this.state.lifepoints_player1}
                             lifepoints_player2 = {this.state.lifepoints_player2}
@@ -319,13 +284,7 @@ class Game extends Component {
                             <div className="col-sm-1">1</div>
                             <div className="col-sm-1">1</div>
                             <div className="col-sm-1">1</div>
-                                <Deck player={"Player 1"} updatePhaseTurn={this.updatePhaseTurn.bind(this)}
-                                      turn={this.state.current_turn} phase={this.state.phase_index_player1}
-                                      playMonster={this.playMonsterCard.bind(this)}
-                                      setMonsterCard={this.setMonsterCard.bind(this)}
-                                      updateHand={this.updateHand.bind(this)}
 
-                                />
                             <div className="col-sm-1">1</div>
                             <div className="col-sm-1">Lifepoints: {this.state.lifepoints_player1}</div>
                         </div>
