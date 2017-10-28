@@ -8,7 +8,8 @@ class Board extends Component {
         super()
         this.state = {
             monster_field_player1: [], monster_field_player2: [],
-            attacker: "", target: ""
+            attacker: "", target: "",
+            graveyard: []
         }
     }
 
@@ -46,18 +47,29 @@ class Board extends Component {
         else if (this.props.current_turn[0] ===2 && this.state.monster_field_player1.length === 0) {
             this.directAttack(e);
         }
-        else if (this.state.attacker && this.state.attacked) {
+        else if (this.state.attacker && this.state.target) {
             this.attackMonster(e);
         }
     }
 
     attackMonster(e) {
-        if (this.checkIfBattlePhasePlayer1()) {
-            this.setState({
-                lifepoints_player2: this.state.lifepoints_player2-
-                (this.state.attacker.attack-this.state.attacked.attack)
-            })
+        let attacker = this.state.attacker
+        let target = this.state.target
+        console.log(attacker)
+        if (attacker.attack > target.attack) {
+            this.props.getLifepoints(attacker.attack-target.attack)
+            this.defeatedMonster(target)
         }
+    }
+
+    defeatedMonster(target) {
+        this.state.graveyard.push(target)
+
+        this.setState({
+            graveyard: this.state.graveyard
+        }, function() {
+            console.log(this.state.graveyard)
+        })
     }
 
     selectAttacker(e, owner) {
@@ -80,7 +92,7 @@ class Board extends Component {
             console.log(attacker)
             this.setState({
                 attacker: attacker
-            }, function() {
+            }, function () {
                 console.log(this.state.attacker, 'is the attacker')
             })
         }
@@ -172,7 +184,7 @@ class Board extends Component {
                     <div className="col-sm-3">{this.props.current_phase}</div>
                     <div className="col-sm-3">
                         <button onClick={this.clearAttackerTarget.bind(this)}>End Phase</button>
-                        {show_attack_button ? <button>Attack</button> : ''}
+                        {show_attack_button ? <button onClick={this.attack.bind(this)}>Attack</button> : ''}
                         {direct_attack_button ? <button onClick={this.attack.bind(this)}>Direct Attack</button> : ''}
                     </div>
                     <div className="col-sm-1">z</div>

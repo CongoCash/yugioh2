@@ -51,7 +51,7 @@ Card.create([
   },
   {
     card_name: "Dark Magician",
-    attack: 800,
+    attack: 2500,
     defense: 2000,
     selected: false,
     id: 8,
@@ -86,10 +86,14 @@ Card.create([
   },
 ])
 
-User.create({
+User.create([{
   username: "david",
   password: "test"
-})
+  },
+  {
+    username: "test",
+    password: "test"
+  }])
 
 Deck.create([{
   cards_id: 3,
@@ -130,6 +134,45 @@ Deck.create([{
   {
   cards_id: 4,
   users_id: 1
+  },
+  {cards_id: 3,
+  users_id: 2
+  },
+  {
+   cards_id: 4,
+   users_id: 2
+  },
+  {
+   cards_id: 5,
+   users_id: 2
+  },
+  {
+   cards_id: 6,
+   users_id: 2
+  },
+  {
+   cards_id: 7,
+   users_id: 2
+  },
+  {
+   cards_id: 8,
+   users_id: 2
+  },
+  {
+   cards_id: 9,
+   users_id: 2
+  },
+  {
+   cards_id: 10,
+   users_id: 2
+  },
+  {
+   cards_id: 3,
+   users_id: 2
+  },
+  {
+   cards_id: 4,
+   users_id: 2
   }
   ])
 # Card.create([

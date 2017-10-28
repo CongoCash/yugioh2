@@ -181,14 +181,21 @@ class Game extends Component {
         }
     }
 
-    getLifepoints(attack, current_turn) {
-        console.log(attack)
-        console.log(current_turn)
-        if (current_turn[0] === 1) {
+    getLifepoints(attack) {
+        console.log(this.state.current_turn[0], 'current turn')
+        if (this.state.current_turn[0] === 1) {
             this.setState({
                 lifepoints_player2: this.state.lifepoints_player2-attack
             }, function() {
                 console.log(this.state.lifepoints_player2)
+                this.winCondition()
+            })
+        }
+        else if (this.state.current_turn[0] === 2) {
+            this.setState({
+                lifepoints_player1: this.state.lifepoints_player1-attack
+            }, function() {
+                this.winCondition()
             })
         }
     }
@@ -200,13 +207,13 @@ class Game extends Component {
             var attack1 = <button onClick={(e) => this.attackButton()}>Attack</button>
         }
 
-        let winner = this.state.winner !== ""
+        let winner = this.state.winner != ""
 
         return(
             <div className="container">
                 <div className="row">
                     <div className="col-sm-12 center-page">
-                        {winner ? <h1>{this.state.winner}</h1> : ""}
+                        {winner ? <h1>{this.state.winner} has won!</h1> : ""}
                         <div className="col-sm-12">Lifepoints: {this.state.lifepoints_player2}</div>
                         <Board
                             //deck functions
