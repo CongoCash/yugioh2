@@ -1,24 +1,19 @@
 import React, { Component } from 'react'
 import Deck from '../deck/Deck.js'
+import Monster_field from '../monster_field/Monster_field.js'
 
 class Board extends Component {
 
     constructor(){
         super()
         this.state = {
-            current_hand_player1: [], current_hand_player2: [],
-            current_hand: [],
             monster_field_player1: [], monster_field_player2: [],
+            attacker: "", target: ""
         }
     }
 
-    getCurrentHand(hand) {
-        this.setState({
-            current_hand: hand
-        })
-    }
 
-    playMonsterCard(monster) {
+    playMonsterCard(monster, e) {
         if (this.props.checkIfBattlePhasePlayer1()) {
             if (this.state.monster_field_player1.length < 5) {
                 this.state.monster_field_player1.push(monster)
@@ -28,7 +23,7 @@ class Board extends Component {
                 })
             }
         }
-        else if (this.props.checkIfBattlePhasePlayer2()) {
+        else if (/*current monster belongs to player 2 && */ this.props.checkIfBattlePhasePlayer2()) {
             if (this.state.monster_field_player2.length < 5) {
                 this.state.monster_field_player2.push(monster)
 
@@ -39,14 +34,117 @@ class Board extends Component {
         }
     }
 
+    directAttack(e){
+        let attackerInfo = this.state.attacker.attack
+        this.props.getLifepoints(attackerInfo, this.props.current_turn)
+    }
+
+    attack(e) {
+        if (this.props.current_turn[0] ===1 && this.state.monster_field_player2.length === 0) {
+            this.directAttack(e);
+        }
+        else if (this.props.current_turn[0] ===2 && this.state.monster_field_player1.length === 0) {
+            this.directAttack(e);
+        }
+        else if (this.state.attacker && this.state.attacked) {
+            this.attackMonster(e);
+        }
+    }
+
+    attackMonster(e) {
+        if (this.checkIfBattlePhasePlayer1()) {
+            this.setState({
+                lifepoints_player2: this.state.lifepoints_player2-
+                (this.state.attacker.attack-this.state.attacked.attack)
+            })
+        }
+    }
+
+    selectAttacker(e, owner) {
+        console.log('enter attacker')
+        if (this.props.current_turn[0] === 1 && this.props.phase_index_player1=== 1 && owner==1) {
+            let attacker = this.state.monster_field_player1.find((monster) => {
+                return monster.card_name === e.target.innerHTML
+            })
+            this.setState({
+                attacker: attacker
+            }, function() {
+                console.log(this.state.attacker, 'is the attacker')
+            })
+        }
+
+        else if (this.props.current_turn[0] === 2 && this.props.phase_index_player2=== 1 && owner==2) {
+            let attacker = this.state.monster_field_player2.find((monster) => {
+                return monster.card_name === e.target.innerHTML
+            })
+            console.log(attacker)
+            this.setState({
+                attacker: attacker
+            }, function() {
+                console.log(this.state.attacker, 'is the attacker')
+            })
+        }
+    }
+
+    selectTarget(e, owner) {
+        console.log(owner)
+        if (this.props.current_turn[0] === 1 && this.props.phase_index_player1=== 1 && owner==2) {
+            let target = this.state.monster_field_player2.find((monster) => {
+                return monster.card_name === e.target.innerHTML
+            })
+            console.log(target)
+            this.setState({
+                target: target
+            }, function() {
+                console.log(this.state.target, 'is the target')
+            })
+        }
+
+        else if (this.props.current_turn[0] === 2 && this.props.phase_index_player2=== 1 && owner==1) {
+            let target = this.state.monster_field_player1.find((monster) => {
+                return monster.card_name === e.target.innerHTML
+            })
+            console.log(target)
+            this.setState({
+                target: target
+            }, function() {
+                console.log(this.state.target, 'is the target')
+            })
+        }
+    }
+
+    selectingMonster(e, owner) {
+        this.selectAttacker(e, owner)
+        this.selectTarget(e, owner)
+    }
+
+    clearAttackerTarget() {
+        this.setState({
+            attacker: "",
+            target: ""
+        })
+        this.props.end_phase()
+    }
+
     render() {
+
+        let show_attack_button = this.state.attacker && this.state.target ;
+        let direct_attack_button =
+            (this.state.attacker && this.props.current_turn[0] === 1  &&
+                this.state.monster_field_player2.length === 0 && this.props.phase_index_player1 === 1)
+        || (this.state.attacker && this.props.current_turn[0] === 2  &&
+            this.state.monster_field_player1.length === 0 && this.props.phase_index_player2 === 1)
 
         return(
             <div className="container">
                 <div className="row">
                     <Deck
+                        owner={2}
+                        isActive={this.props.current_turn[0] === 2}
                         playMonster={this.playMonsterCard.bind(this)}
-                        getCurrentHand={this.getCurrentHand.bind(this)}
+                        updatePhaseTurn={this.props.updatePhaseTurn}
+                        current_turn={this.props.current_turn}
+                        phase_index={this.props.phase_index_player2}
                     />
                 </div>
                 <div className="row spell_p2">
@@ -62,47 +160,30 @@ class Board extends Component {
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
                 </div>
-                <div className="row monster_p2">
-                    <div className="col-sm-1">1</div>
-                    <div className="col-sm-1">1</div>
-                    <div className="col-sm-1 graveyard">Graveyard</div>
-                    <div className="col-sm-6">
-                        {this.state.monster_field_player2.map((monster) => {
-                            return (
-                                <span className="col-sm-2">{monster.card_name}</span>
-                            )})}
-                    </div>
-                    <div className="col-sm-1 fusion1_p2">Fusion</div>
-                    <div className="col-sm-1">1</div>
-                    <div className="col-sm-1">1</div>
-                </div>
+                <Monster_field
+                    owner={2}
+                    monster_field={this.state.monster_field_player2}
+                    select_monster={this.selectingMonster.bind(this)}
+                />
                 <div className="row phase">
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-3">{this.props.current_phase}</div>
                     <div className="col-sm-3">
-                        <button onClick={this.props.end_phase}>End Phase</button>
-                        {this.props.attack}
+                        <button onClick={this.clearAttackerTarget.bind(this)}>End Phase</button>
+                        {show_attack_button ? <button>Attack</button> : ''}
+                        {direct_attack_button ? <button onClick={this.attack.bind(this)}>Direct Attack</button> : ''}
                     </div>
                     <div className="col-sm-1">z</div>
                     <div className="col-sm-1">z</div>
                     <div className="col-sm-1">z</div>
                 </div>
-                <div className="row monster_p1">
-                    <div className="col-sm-1">1</div>
-                    <div className="col-sm-1">1</div>
-                    <div className="col-sm-1">1</div>
-                    <div className="col-sm-6">
-                        {this.state.monster_field_player1.map((monster) => {
-                            return (
-                                <span className="col-sm-2">{monster.card_name}</span>
-                            )})}
-                    </div>
-                    <div className="col-sm-1 graveyard">Graveyard</div>
-                    <div className="col-sm-1">1</div>
-                    <div className="col-sm-1">1</div>
-                </div>
+                <Monster_field
+                    owner={1}
+                    monster_field={this.state.monster_field_player1}
+                    select_monster={this.selectingMonster.bind(this)}
+                />
                 <div className="row spell_p1">
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
@@ -118,8 +199,12 @@ class Board extends Component {
                 </div>
                 <div className="row">
                     <Deck
+                        owner={1}
                         playMonster={this.playMonsterCard.bind(this)}
-                        getCurrentHand={this.getCurrentHand.bind(this)}
+                        isActive={this.props.current_turn[0] === 1}
+                        current_turn={this.props.current_turn}
+                        updatePhaseTurn={this.props.updatePhaseTurn}
+                        phase_index={this.props.phase_index_player1}
                     />
                 </div>
             </div>

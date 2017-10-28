@@ -54,12 +54,13 @@ class Deck extends Component {
             current_hand: initial_hand,
             deck: initial_deck
         }, function() {
-            this.props.getCurrentHand(this.state.current_hand)
+            // this.props.getCurrentHand(this.state.current_hand)
         })
     }
 
     drawCard() {
-        if (this.props.turn[0] === 1 && this.props.phase=== 0) {
+        console.log(this.props.phase_index)
+        if (this.props.current_turn[0] === 1 && this.props.owner == 1 && this.props.phase_index=== 0) {
             let new_card = this.state.deck.shift()
             let new_deck = this.state.deck
             let new_hand = this.state.current_hand
@@ -67,13 +68,12 @@ class Deck extends Component {
             this.setState({
                 current_hand: new_hand,
                 deck: new_deck,
-                // phase_index_player1: this.state.phase_index_player1+1
             }, function() {
                 console.log(this.state.current_hand)
             }, this.props.updatePhaseTurn())
         }
 
-        else if (this.props.turn[0] === 2 && this.props.phase_player2=== 0) {
+        else if (this.props.current_turn[0] === 2 && this.props.owner ==2 && this.props.phase_index=== 0) {
             let new_card = this.state.deck.shift()
             let new_deck = this.state.deck
             let new_hand = this.state.current_hand
@@ -84,23 +84,24 @@ class Deck extends Component {
                 // phase_index_player1: this.state.phase_index_player1+1
             }, this.props.updatePhaseTurn())
         }
-        this.props.updateHand(this.state.current_hand)
     }
 
     updateHand(e) {
-        let index = this.state.current_hand.findIndex((card) => {
-            return card.join_id == e.target.id
-        })
+        if (this.props.isActive && this.props.phase_index === 1) {
+            let index = this.state.current_hand.findIndex((card) => {
+                return card.join_id == e.target.id
+            })
 
-        let monster = this.state.current_hand.find((card) => {
-            return card.join_id == e.target.id
-        })
+            let monster = this.state.current_hand.find((card) => {
+                return card.join_id == e.target.id
+            })
 
-        this.state.current_hand.splice(index, 1)
-        this.setState({
-            current_hand: this.state.current_hand
-        })
-        this.props.playMonster(monster)
+            this.state.current_hand.splice(index, 1)
+            this.setState({
+                current_hand: this.state.current_hand
+            })
+            this.props.playMonster(monster)
+        }
     }
 
     render() {
