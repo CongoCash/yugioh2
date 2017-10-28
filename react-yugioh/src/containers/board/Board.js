@@ -63,12 +63,24 @@ class Board extends Component {
     }
 
     defeatedMonster(target) {
+        console.log(target)
         this.state.graveyard.push(target)
 
+        if (target.users_id == 2) {
+            var index_defeated_monster = this.state.monster_field_player2.findIndex((monster) => {
+                return monster.join_id === target.join_id
+            })
+        }
+
+        console.log(this.state.monster_field_player2, 'first')
+        this.state.monster_field_player2.splice(index_defeated_monster, 1)
+        console.log(this.state.monster_field_player2, 'second')
+
         this.setState({
-            graveyard: this.state.graveyard
+            graveyard: this.state.graveyard,
+            monster_field_player2: this.state.monster_field_player2
         }, function() {
-            console.log(this.state.graveyard)
+            console.log(this.state.monster_field_player2)
         })
     }
 

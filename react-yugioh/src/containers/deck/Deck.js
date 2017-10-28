@@ -35,12 +35,14 @@ class Deck extends Component {
                     return card.id === data.cards_id
                 })
                 new_card["join_id"] = data.id
-                new_deck.push()
+                new_card["users_id"] = this.props.owner
+
                 new_deck.push(new_card)
             })
             this.setState({
                 deck: shuffle(new_deck),
             }, function(){
+                // console.log(this.state.deck)
                 this.setDeck()
             })
         })
