@@ -25,7 +25,7 @@ class Monster_field extends Component {
                             )
                         })}
                     </div>
-                    <div className="col-sm-1 graveyard">Graveyard</div>
+                    <div className="col-sm-1 graveyard">Grave{this.props.owner}</div>
                     <div className="col-sm-1">1</div>
                     <div className="col-sm-1">1</div>
                 </div>

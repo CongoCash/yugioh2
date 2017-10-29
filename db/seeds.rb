@@ -20,6 +20,7 @@ Card.create([
     defense: 2000,
     selected: false,
     id: 3,
+    position: 'hand'
   },
   {
     card_name: "Feral Imp",
@@ -27,6 +28,7 @@ Card.create([
     defense: 2000,
     selected: false,
     id: 4,
+    position: 'hand'
   },
   {
     card_name: "Kuriboh",
@@ -34,6 +36,7 @@ Card.create([
     defense: 300,
     selected: false,
     id: 5,
+    position: 'hand'
   },
   {
     card_name: "Summoned Skull",
@@ -48,6 +51,7 @@ Card.create([
     defense: 2000,
     selected: false,
     id: 7,
+    position: 'hand'
   },
   {
     card_name: "Dark Magician",
@@ -62,6 +66,7 @@ Card.create([
     defense: 1000,
     selected: false,
     id: 9,
+    position: 'hand'
   },
   {
     card_name: "Curse of Dragon",
@@ -69,6 +74,7 @@ Card.create([
     defense: 2000,
     selected: false,
     id: 10,
+    position: 'hand'
   },
   {
     card_name: "Celtic Guardian",
@@ -76,6 +82,7 @@ Card.create([
     defense: 1000,
     selected: false,
     id: 11,
+    position: 'hand'
   },
   {
     card_name: "Mammoth Graveyard",
@@ -83,6 +90,7 @@ Card.create([
     defense: 1000,
     selected: false,
     id: 12,
+    position: 'hand'
   },
 ])
 

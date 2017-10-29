@@ -9,12 +9,12 @@ class Board extends Component {
         this.state = {
             monster_field_player1: [], monster_field_player2: [],
             attacker: "", target: "",
-            graveyard: []
+            graveyard: [], attDef: false, monster_selected: false
         }
     }
 
 
-    playMonsterCard(monster, e) {
+    playMonsterCard(monster) {
         if (this.props.checkIfBattlePhasePlayer1()) {
             if (this.state.monster_field_player1.length < 5) {
                 this.state.monster_field_player1.push(monster)
@@ -63,25 +63,38 @@ class Board extends Component {
     }
 
     defeatedMonster(target) {
-        console.log(target)
+        //they both go to the same graveyard right now
         this.state.graveyard.push(target)
 
         if (target.users_id == 2) {
             var index_defeated_monster = this.state.monster_field_player2.findIndex((monster) => {
                 return monster.join_id === target.join_id
             })
+
+            this.state.monster_field_player2.splice(index_defeated_monster, 1)
+
+            this.setState({
+                graveyard: this.state.graveyard,
+                monster_field_player2: this.state.monster_field_player2
+            }, function() {
+                console.log(this.state.graveyard, 'player 2')
+            })
         }
 
-        console.log(this.state.monster_field_player2, 'first')
-        this.state.monster_field_player2.splice(index_defeated_monster, 1)
-        console.log(this.state.monster_field_player2, 'second')
+        else if (target.users_id == 1) {
+            var index_defeated_monster = this.state.monster_field_player1.findIndex((monster) => {
+                return monster.join_id === target.join_id
+            })
 
-        this.setState({
-            graveyard: this.state.graveyard,
-            monster_field_player2: this.state.monster_field_player2
-        }, function() {
-            console.log(this.state.monster_field_player2)
-        })
+            this.state.monster_field_player1.splice(index_defeated_monster, 1)
+
+            this.setState({
+                graveyard: this.state.graveyard,
+                monster_field_player1: this.state.monster_field_player1
+            }, function() {
+                console.log(this.state.graveyard, 'player 1')
+            })
+        }
     }
 
     selectAttacker(e, owner) {
@@ -150,7 +163,18 @@ class Board extends Component {
         this.props.end_phase()
     }
 
+    updateAttDef(monster) {
+        this.setState({
+                attDef: monster
+            });
+    }
+
+    setPositionFromHand() {
+
+    }
+
     render() {
+        console.log('rendering')
 
         let show_attack_button = this.state.attacker && this.state.target ;
         let direct_attack_button =
@@ -158,6 +182,7 @@ class Board extends Component {
                 this.state.monster_field_player2.length === 0 && this.props.phase_index_player1 === 1)
         || (this.state.attacker && this.props.current_turn[0] === 2  &&
             this.state.monster_field_player1.length === 0 && this.props.phase_index_player2 === 1)
+
 
         return(
             <div className="container">
@@ -169,6 +194,7 @@ class Board extends Component {
                         updatePhaseTurn={this.props.updatePhaseTurn}
                         current_turn={this.props.current_turn}
                         phase_index={this.props.phase_index_player2}
+                        updateAttDef={this.updateAttDef.bind(this)}
                     />
                 </div>
                 <div className="row spell_p2">
@@ -196,6 +222,11 @@ class Board extends Component {
                     <div className="col-sm-3">{this.props.current_phase}</div>
                     <div className="col-sm-3">
                         <button onClick={this.clearAttackerTarget.bind(this)}>End Phase</button>
+                        {this.state.attDef ?
+                            <div>
+                                <button onClick={this.}>Attack</button>
+                                <button>Defense</button>
+                            </div>: ''}
                         {show_attack_button ? <button onClick={this.attack.bind(this)}>Attack</button> : ''}
                         {direct_attack_button ? <button onClick={this.attack.bind(this)}>Direct Attack</button> : ''}
                     </div>
@@ -229,6 +260,7 @@ class Board extends Component {
                         current_turn={this.props.current_turn}
                         updatePhaseTurn={this.props.updatePhaseTurn}
                         phase_index={this.props.phase_index_player1}
+                        updateAttDef={this.updateAttDef.bind(this)}
                     />
                 </div>
             </div>

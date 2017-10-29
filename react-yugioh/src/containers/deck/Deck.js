@@ -10,7 +10,8 @@ class Deck extends Component {
         this.state = {
             deck: [],
             current_hand: [],
-            all_cards: ''
+            all_cards: '',
+            selected_monster: ""
         }
     }
 
@@ -106,6 +107,19 @@ class Deck extends Component {
         }
     }
 
+
+    selectMonster(e) {
+        let selected = this.state.current_hand.find((card) => {
+            return card.card_name == e.target.innerHTML
+        })
+        this.setState({
+            selected_monster: selected
+        }, function() {
+            this.props.updateAttDef(this.state.selected_monster)
+
+        })
+    }
+
     render() {
 
         return(
@@ -117,9 +131,8 @@ class Deck extends Component {
                 .map((card) => {
                     return (
                         <span className="col-sm-2">
-                                <span id={card.join_id} onClick={(e) => this.updateHand(e)}>
-                                    {card.card_name} </span>
-
+                                <span id={card.join_id} onClick={(e) => this.selectMonster(e)}>
+                                    {card.card_name}</span>
                         </span>
                     )
                 })}
