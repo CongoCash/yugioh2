@@ -8,11 +8,7 @@ class Monster_field extends Component {
             <div className="row">
                 <div className="col-sm-1">1</div>
                 <div className="col-sm-5">
-                {this.props.monster_field.map((monster) => {
-                    return(
-                        <span className="col-sm-2">{monster.card_name}</span>
-                    )
-                })}
+                    {this.props.monster_field}
                 </div>
                 <div className="col-sm-1">1</div>
             </div>

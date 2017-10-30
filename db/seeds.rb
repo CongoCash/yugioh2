@@ -1,98 +1,102 @@
+require 'open-uri'
 Card.destroy_all
 User.destroy_all
 Deck.destroy_all
 
-# yugi = Nokogiri::HTML(open('https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=1&sess=1&pid=13301000&rp=99999'))
-#
-# for i in 0..10
-#   Card.create([{
-#     card_name: yugi.css('.card_status strong')[i].text,
-#     attack: yugi.css('.atk_power')[0].text.split(" ")[1],
-#     defense: yugi.css('.def_power')[0].text.split(" ")[1]
-#                }])
-# end
+yugi = Nokogiri::HTML(open('https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=1&sess=1&pid=13301000&rp=99999'))
+
+for i in 0..15
+  Card.create([{
+    card_name: yugi.css('.card_status strong')[i].text,
+    attack: yugi.css('.atk_power')[0].text.split(" ")[1],
+    defense: yugi.css('.def_power')[0].text.split(" ")[1],
+    description: yugi.css('.box_card_text')[i].text.split("\r\n\t\t\r\n\t\t\t\t\t\t\t\t\t\t")[1].split("\r\n\t\t\r\n\t\t\t\t\t\t\t\t\t")[0],
+    selected: false,
+    position: 'hand',
+  }])
+end
 
 
-Card.create([
-  {
-    card_name: "Mystical Elf",
-    attack: 1800,
-    defense: 2000,
-    selected: false,
-    id: 3,
-    position: 'hand'
-  },
-  {
-    card_name: "Feral Imp",
-    attack: 1200,
-    defense: 2000,
-    selected: false,
-    id: 4,
-    position: 'hand'
-  },
-  {
-    card_name: "Kuriboh",
-    attack: 200,
-    defense: 300,
-    selected: false,
-    id: 5,
-    position: 'hand'
-  },
-  {
-    card_name: "Summoned Skull",
-    attack: 2500,
-    defense: 2000,
-    selected: false,
-    id: 6,
-  },
-  {
-    card_name: "Beaver Warrior",
-    attack: 1100,
-    defense: 2000,
-    selected: false,
-    id: 7,
-    position: 'hand'
-  },
-  {
-    card_name: "Dark Magician",
-    attack: 2500,
-    defense: 2000,
-    selected: false,
-    id: 8,
-  },
-  {
-    card_name: "Gaia The Fierce Knight",
-    attack: 2800,
-    defense: 1000,
-    selected: false,
-    id: 9,
-    position: 'hand'
-  },
-  {
-    card_name: "Curse of Dragon",
-    attack: 800,
-    defense: 2000,
-    selected: false,
-    id: 10,
-    position: 'hand'
-  },
-  {
-    card_name: "Celtic Guardian",
-    attack: 1800,
-    defense: 1000,
-    selected: false,
-    id: 11,
-    position: 'hand'
-  },
-  {
-    card_name: "Mammoth Graveyard",
-    attack: 1500,
-    defense: 1000,
-    selected: false,
-    id: 12,
-    position: 'hand'
-  },
-])
+# Card.create([
+#   {
+#     card_name: "Mystical Elf",
+#     attack: 1800,
+#     defense: 2000,
+#     selected: false,
+#     id: 3,
+#     position: 'hand'
+#   },
+#   {
+#     card_name: "Feral Imp",
+#     attack: 1200,
+#     defense: 2000,
+#     selected: false,
+#     id: 4,
+#     position: 'hand'
+#   },
+#   {
+#     card_name: "Kuriboh",
+#     attack: 200,
+#     defense: 300,
+#     selected: false,
+#     id: 5,
+#     position: 'hand'
+#   },
+#   {
+#     card_name: "Summoned Skull",
+#     attack: 2500,
+#     defense: 2000,
+#     selected: false,
+#     id: 6,
+#   },
+#   {
+#     card_name: "Beaver Warrior",
+#     attack: 1100,
+#     defense: 2000,
+#     selected: false,
+#     id: 7,
+#     position: 'hand'
+#   },
+#   {
+#     card_name: "Dark Magician",
+#     attack: 2500,
+#     defense: 2000,
+#     selected: false,
+#     id: 8,
+#   },
+#   {
+#     card_name: "Gaia The Fierce Knight",
+#     attack: 2800,
+#     defense: 1000,
+#     selected: false,
+#     id: 9,
+#     position: 'hand'
+#   },
+#   {
+#     card_name: "Curse of Dragon",
+#     attack: 800,
+#     defense: 2000,
+#     selected: false,
+#     id: 10,
+#     position: 'hand'
+#   },
+#   {
+#     card_name: "Celtic Guardian",
+#     attack: 1800,
+#     defense: 1000,
+#     selected: false,
+#     id: 11,
+#     position: 'hand'
+#   },
+#   {
+#     card_name: "Mammoth Graveyard",
+#     attack: 1500,
+#     defense: 1000,
+#     selected: false,
+#     id: 12,
+#     position: 'hand'
+#   },
+# ])
 
 User.create([{
   username: "david",

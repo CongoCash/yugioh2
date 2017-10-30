@@ -30,15 +30,21 @@ class Board extends Component {
 
                 <div>
                     <Monster_field
-                        monster_field={this.props.monster_field2}
-                        select_attacker={this.props.select_attacker}
+                        monster_field={this.props.monster_field2.map((monster) => {
+                            return(
+                                <span onClick={this.props.select_attack_target} className="col-sm-2 user2">{monster.card_name}</span>
+                            )
+                        })}
                     />
                 </div>
                 <hr></hr>
                 <div>
                     <Monster_field
-                        monster_field={this.props.monster_field1}
-                        select_attacker={this.props.select_attacker}
+                        monster_field={this.props.monster_field1.map((monster) => {
+                            return(
+                                <span onClick={this.props.select_attack_target} className="col-sm-2 user1">{monster.card_name}</span>
+                            )
+                        })}
                     />
                 </div>
 
