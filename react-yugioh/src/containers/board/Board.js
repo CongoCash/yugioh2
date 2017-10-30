@@ -29,11 +29,17 @@ class Board extends Component {
                 </div>
 
                 <div>
-                    <Monster_field />
+                    <Monster_field
+                        monster_field={this.props.monster_field2}
+                        select_attacker={this.props.select_attacker}
+                    />
                 </div>
-
+                <hr></hr>
                 <div>
-                    <Monster_field />
+                    <Monster_field
+                        monster_field={this.props.monster_field1}
+                        select_attacker={this.props.select_attacker}
+                    />
                 </div>
 
                 <div>
