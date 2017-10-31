@@ -1,0 +1,11 @@
+<div class="col-sm-12">
+  <%= form_for @game do |f| %>
+      <%= f.submit "Create Game", class: "btn" %>
+  <% end %>
+
+  <% @active.each do |active| %>
+      <%= active.id %>
+      <%= link_to 'Join Game', games_id_path(active.id), class: 'btn btn-primary btn-large blue' %>
+  <% end %>
+
+</div>

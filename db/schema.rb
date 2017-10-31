@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171031085523) do
+ActiveRecord::Schema.define(version: 20171031211428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,22 +49,35 @@ ActiveRecord::Schema.define(version: 20171031085523) do
   end
 
   create_table "games", force: :cascade do |t|
-    t.integer "graveyard_user1", default: [], array: true
-    t.integer "monster_field_user1", default: [], array: true
-    t.integer "spell_field_user1", default: [], array: true
-    t.integer "deck_user1", default: [], array: true
-    t.integer "current_hand_user1", default: [], array: true
-    t.integer "lifepoints_user1", default: [], array: true
-    t.integer "turn_counter_user1", default: [], array: true
-    t.integer "graveyard_user2", default: [], array: true
-    t.integer "monster_field_user2", default: [], array: true
-    t.integer "spell_field_user2", default: [], array: true
-    t.integer "deck_user2", default: [], array: true
-    t.integer "current_hand_user2", default: [], array: true
-    t.integer "lifepoints_user2", default: [], array: true
-    t.integer "turn_counter_user2", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "lifepoints1", default: 8000
+    t.integer "lifepoints2", default: 8000
+    t.string "turn", default: "player1"
+    t.integer "phase", default: 0
+    t.string "phase_name", default: ["Draw", "Main1", "Battle", "Main 2", "End"], array: true
+    t.string "deck1", default: [], array: true
+    t.string "deck2", default: [], array: true
+    t.string "hand1", default: [], array: true
+    t.string "hand2", default: [], array: true
+    t.string "monster_field1", default: [], array: true
+    t.string "monster_field2", default: [], array: true
+    t.boolean "monster_slots1", default: [false, false, false, false, false], array: true
+    t.boolean "monster_slots2", default: [false, false, false, false, false], array: true
+    t.string "spell_field1", default: [], array: true
+    t.string "spell_field2", default: [], array: true
+    t.boolean "monster_selected", default: false
+    t.string "selected_monster", default: ""
+    t.boolean "monster_played", default: false
+    t.boolean "has_drawn", default: false
+    t.boolean "attacker_selected", default: false
+    t.boolean "target_selected", default: false
+    t.string "selected_attacker", default: ""
+    t.string "selected_target", default: ""
+    t.boolean "selected_has_attacked", default: false
+    t.boolean "first_turn", default: true
+    t.string "winner", default: ""
+    t.string "selected_card", default: ""
   end
 
   create_table "users", force: :cascade do |t|
