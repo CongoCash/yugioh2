@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171031010000) do
+ActiveRecord::Schema.define(version: 20171031085523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,12 @@ ActiveRecord::Schema.define(version: 20171031010000) do
     t.boolean "has_changed_battle_position", default: false
     t.boolean "faceup", default: false
     t.string "image_url"
+  end
+
+  create_table "chat_messages", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "decks", force: :cascade do |t|

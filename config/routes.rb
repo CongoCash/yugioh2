@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount ActionCable.server => '/cable'
+
   root to: 'users#index'
   get '/users/new', to: 'users#new', as: 'new_user'
   post '/users', to: 'users#create'
@@ -10,4 +12,5 @@ Rails.application.routes.draw do
 
   get 'api/cards', to: 'api#cards'
   get 'api/decks', to: 'api#decks'
+
 end
