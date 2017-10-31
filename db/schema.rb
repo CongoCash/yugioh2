@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171030043727) do
+ActiveRecord::Schema.define(version: 20171031010000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,9 @@ ActiveRecord::Schema.define(version: 20171030043727) do
     t.string "position"
     t.boolean "selected", default: false
     t.boolean "has_attacked", default: false
+    t.boolean "has_changed_battle_position", default: false
+    t.boolean "faceup", default: false
+    t.string "image_url"
   end
 
   create_table "decks", force: :cascade do |t|

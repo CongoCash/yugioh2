@@ -5,14 +5,30 @@ Deck.destroy_all
 
 yugi = Nokogiri::HTML(open('https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=1&sess=1&pid=13301000&rp=99999'))
 
-for i in 0..15
+images = ['http://940ee6dce6677fa01d25-0f55c9129972ac85d6b1f4e703468e6b.r99.cf2.rackcdn.com/products/pictures/131307.jpg',
+  'https://images-na.ssl-images-amazon.com/images/I/717bZz1aPYL._SY550_.jpg',
+  'https://images-na.ssl-images-amazon.com/images/I/71tRlxtm5wL._SY450_.jpg',
+  'http://assets.dacw.co/itemimages/6683.jpg',
+  'https://vignette.wikia.nocookie.net/yugioh/images/1/1c/BeaverWarrior-YGLD-EN-C-1E.png/revision/latest/scale-to-width-down/300?cb=20170812192624',
+  'http://vignette2.wikia.nocookie.net/myyugiohdeck/images/6/6e/DarkMagician-CT13-EN-UR-LE.png/revision/latest?cb=20160908033031',
+  'http://940ee6dce6677fa01d25-0f55c9129972ac85d6b1f4e703468e6b.r99.cf2.rackcdn.com/products/pictures/130705.jpg',
+  'https://vignette.wikia.nocookie.net/yugioh/images/c/c8/CurseofDragon-YGLD-EN-C-1E.png/revision/latest/scale-to-width-down/300?cb=20170812185941',
+  'https://images-na.ssl-images-amazon.com/images/I/51MJU6iQkJL._SY450_.jpg',
+  'https://vignette.wikia.nocookie.net/yugioh/images/2/24/MammothGraveyard-YGLD-EN-C-1E.png/revision/latest/scale-to-width-down/300?cb=20170812194134',
+  'https://vignette2.wikia.nocookie.net/yugioh/images/d/d5/GreatWhite-SYE-EN-C-UE.png/revision/latest?cb=20150417180638',
+  'https://vignette2.wikia.nocookie.net/yugioh/images/2/2a/SilverFang-LCYW-EN-UR-1E.jpg/revision/latest?cb=20121003155910',
+  'https://vignette4.wikia.nocookie.net/yugioh/images/a/a4/GiantSoldierofStone-SDMY-EN-C-1E.png/revision/latest?cb=20161021200132',
+  'http://vignette2.wikia.nocookie.net/yugioh/images/3/32/DragonZombie-LCJW-EN-C-1E.png/revision/latest?cb=20131013121017',
+  'http://vignette2.wikia.nocookie.net/yugioh/images/9/9e/DomaTheAngelofSilence-MRD-EN-C-UE.png/revision/latest?cb=20150508165718'
+]
+
+for i in 0..images.length
   Card.create([{
     card_name: yugi.css('.card_status strong')[i].text,
-    attack: yugi.css('.atk_power')[0].text.split(" ")[1],
-    defense: yugi.css('.def_power')[0].text.split(" ")[1],
+    attack: yugi.css('.atk_power')[i].text.split(" ")[1],
+    defense: yugi.css('.def_power')[i].text.split(" ")[1],
     description: yugi.css('.box_card_text')[i].text.split("\r\n\t\t\r\n\t\t\t\t\t\t\t\t\t\t")[1].split("\r\n\t\t\r\n\t\t\t\t\t\t\t\t\t")[0],
-    selected: false,
-    position: 'hand',
+    image_url: images[i],
   }])
 end
 
