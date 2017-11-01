@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171101015115) do
+ActiveRecord::Schema.define(version: 20171101184631) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,24 @@ ActiveRecord::Schema.define(version: 20171101015115) do
     t.string "selected_card", default: ""
   end
 
+  create_table "kaibas", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "card_name"
+    t.integer "attack"
+    t.integer "defense"
+    t.string "card_type"
+    t.integer "stars"
+    t.string "card_attribute"
+    t.string "description"
+    t.string "position"
+    t.boolean "selected", default: false
+    t.boolean "has_attacked", default: false
+    t.boolean "has_changed_battle_position", default: false
+    t.boolean "faceup", default: false
+    t.string "image_url"
+  end
+
   create_table "two_players", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -117,6 +135,24 @@ ActiveRecord::Schema.define(version: 20171101015115) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "yugis", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "card_name"
+    t.integer "attack"
+    t.integer "defense"
+    t.string "card_type"
+    t.integer "stars"
+    t.string "card_attribute"
+    t.string "description"
+    t.string "position"
+    t.boolean "selected", default: false
+    t.boolean "has_attacked", default: false
+    t.boolean "has_changed_battle_position", default: false
+    t.boolean "faceup", default: false
+    t.string "image_url"
   end
 
 end

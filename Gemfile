@@ -61,3 +61,5 @@ gem 'rack-cors'
 gem 'bootstrap', '~> 4.0.0.beta2.1'
 
 gem 'jquery-rails'
+
+gem 'httparty'

@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   post '/sessions', to: 'sessions#create'
 
   get 'api/cards', to: 'api#cards'
+  get 'api/yugi', to: 'api#yugi'
+  get 'api/kaiba', to: 'api#kaiba'
   get 'api/decks', to: 'api#decks'
   get 'api/games', to: 'api#allgames'
   get 'api/games/:id', to: 'api#games'

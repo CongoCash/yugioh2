@@ -16,4 +16,12 @@ class ApiController < ApplicationController
     @games = Game.find_by_id(params[:id])
   end
 
+  def yugi
+    @yugis = Yugi.all()
+  end
+
+  def kaiba
+    @kaibas = Kaiba.all()
+  end
+
 end

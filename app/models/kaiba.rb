@@ -1,0 +1,2 @@
+class Kaiba < ApplicationRecord
+end

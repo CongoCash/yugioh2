@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import CardsModel from '../../models/Card.js'
+import YugisModel from '../../models/Yugi.js'
+import KaibasModel from '../../models/Kaiba.js'
 import Board from '../../containers/board/Board.js'
 import './Game.css';
 import GamesModel from "../../models/Game";
@@ -22,7 +23,8 @@ class Game extends Component {
             attacker_selected: '', target_selected: '',
             selected_attacker: '', selected_target: '',
             selected_has_attacked: '', first_turn: '',
-            winner: '', selected_card: '', current_move: ''
+            winner: '', selected_card: '', current_move: '',
+            exodia1: [], exodia2: [],
         }
     }
 
@@ -33,6 +35,8 @@ class Game extends Component {
 
     fetchData(){
 
+        //I initially was going to constantly grab/send data to the database in an effort
+        //to make this 2 player, but the idea was scrapped due to time
         GamesModel.specific(this.props.game_id).then((res) => {
             console.log(res.data.game.lifepoints1, 'phase data')
             this.setState({
@@ -57,7 +61,7 @@ class Game extends Component {
     getInitialCards() {
         var shuffle = require('shuffle-array')
 
-        CardsModel.cards().then((res) => {
+        YugisModel.cards().then((res) => {
             let data = res.data
             let shuffle_deck1 = shuffle(data)
             let hand1 = shuffle_deck1.slice(0,5)
@@ -66,10 +70,12 @@ class Game extends Component {
             this.setState({
                 hand1: hand1,
                 deck1: deck1,
+            }, function() {
+                this.winCondition()
             })
         })
 
-        CardsModel.cards().then((res) => {
+        KaibasModel.cards().then((res) => {
             let data = res.data
             let shuffle_deck2 = shuffle(data)
             let hand2 = shuffle_deck2.slice(0,5)
@@ -78,12 +84,13 @@ class Game extends Component {
             this.setState({
                 hand2: hand2,
                 deck2: deck2,
+            }, function() {
+                this.winCondition()
             })
         })
     }
 
     endPhase() {
-        console.log(this)
         this.setState({
             monster_selected: false, monster_played: false,
             has_drawn: false,
@@ -137,6 +144,8 @@ class Game extends Component {
                 this.setState({
                     hand1: this.state.hand1,
                     has_drawn: true,
+                }, function() {
+                    this.winCondition()
                 })
             }
 
@@ -147,7 +156,7 @@ class Game extends Component {
                     hand2: this.state.hand2,
                     has_drawn: true,
                 }, function() {
-                    console.log(this.state.hand2)
+                    this.winCondition()
                 })
             }
         }
@@ -161,7 +170,7 @@ class Game extends Component {
             console.log(card, 'looping through cards')
             return (card.image_url === e.target.src)
         })
-        if (this.state.turn === 'player1') {
+        if (this.state.turn === 'player1' && this.state.monster.stars <= 4) {
             this.setState({
                 selected_card: monster,
             }, function () {
@@ -560,7 +569,46 @@ class Game extends Component {
     }
 
     winCondition() {
-        if (this.state.lifepoints1 <= 0) {
+        let EXODIA = ['Left Arm of the Forbidden One', 'Left Leg of the Forbidden One',
+            'Right Arm of the Forbidden One', 'Right Leg of the Forbidden One',
+            'Exodia the Forbidden One'
+        ]
+
+        EXODIA.forEach((card, index) => {
+            let found1 = this.state.hand1.find((hand) => {
+                return hand.card_name === card
+            })
+            if (found1) {
+                this.state.exodia1.push(found1)
+            }
+            this.state.hand2.forEach((hand) => {
+                if (hand.card_name === card) {
+                    this.state.exodia2[index] = true
+                }
+            })
+        })
+
+        if (this.state.exodia1.length === 5) {
+            this.setState({
+                winner: 'Player 1'
+            })
+        }
+        else{
+            this.setState({
+                exodia1: []
+            })
+        }
+
+
+        if (this.state.exodia2[0] === true && this.state.exodia2[1] === true
+            && this.state.exodia2[2] === true && this.state.exodia2[3] === true
+            && this.state.exodia2[4] === true) {
+            this.setState({
+                winner: 'Player 2'
+            })
+        }
+
+        else if (this.state.lifepoints1 <= 0) {
             this.setState({
                 winner: 'Player 2'
             })
@@ -690,6 +738,7 @@ class Game extends Component {
                             (<h3><div>{this.state.selected_card.card_name}</div>
                                 <div>Attack: {this.state.selected_card.attack}</div>
                                 <div>Defense: {this.state.selected_card.defense}</div>
+                                <div>Stars: {this.state.selected_card.stars}</div>
                                 <div>Description: <h4>{this.state.selected_card.description}</h4></div>
                                 <img src={this.state.selected_card.image_url} height="430" width="295"/>
                             </h3>) : ""
