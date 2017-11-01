@@ -33,12 +33,12 @@ class Board extends Component {
                     <Monster_field
                         monster_field={this.props.monster_field2.map((monster) => {
                             return(
-                                <span onClick={this.props.main_phase1_2} className="col-sm-1 user2 card">{monster.card_name}</span>
+                                <img onClick={this.props.main_phase1_2} className="col-sm-1 player2 card" height="100" width="60" src={monster.image_url}/>
                             )
                         })}
                         monster_slots={this.props.monster_slots2.map((slot) => {
                             return(
-                                <img className="col-sm-1 user2 card" height="100" width="68" src="https://i.imgur.com/tqeeCjU.png" />
+                                <img className="col-sm-1 player2 card" height="100" width="68" src="https://i.imgur.com/tqeeCjU.png" />
                             )
                         })}
                         // monster_slots={for 0..this.props.length_monster_field1}
@@ -49,12 +49,12 @@ class Board extends Component {
                     <Monster_field
                         monster_field={this.props.monster_field1.map((monster) => {
                             return(
-                                <img onClick={this.props.main_phase1_2} className="col-sm-1 user1 card" height="100" width="60" src={monster.image_url}/>
+                                <img onClick={this.props.main_phase1_2} className="col-sm-1 player1 card" height="100" width="60" src={monster.image_url}/>
                             )
                         })}
                         monster_slots={this.props.monster_slots1.map((slot) => {
                             return(
-                                <img className="col-sm-1 user2 card" height="100" width="68" src="https://i.imgur.com/tqeeCjU.png" />
+                                <img className="col-sm-1 player2 card" height="100" width="68" src="https://i.imgur.com/tqeeCjU.png" />
                             )
                         })}
                     />

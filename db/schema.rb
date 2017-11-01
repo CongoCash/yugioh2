@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171031211428) do
+ActiveRecord::Schema.define(version: 20171101015115) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,38 @@ ActiveRecord::Schema.define(version: 20171031211428) do
     t.boolean "first_turn", default: true
     t.string "winner", default: ""
     t.string "selected_card", default: ""
+  end
+
+  create_table "two_players", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "lifepoints1"
+    t.integer "lifepoints2"
+    t.string "turn"
+    t.integer "phase"
+    t.string "phase_name", array: true
+    t.string "deck1"
+    t.string "deck2"
+    t.string "hand1"
+    t.string "hand2"
+    t.string "monster_field1", array: true
+    t.string "monster_field2", array: true
+    t.boolean "monster_slots1", array: true
+    t.boolean "monster_slots2", array: true
+    t.string "spell_field1", array: true
+    t.string "spell_field2", array: true
+    t.boolean "monster_selected"
+    t.string "selected_monster"
+    t.boolean "monster_played"
+    t.boolean "has_drawn"
+    t.boolean "attacker_selected"
+    t.boolean "target_selected"
+    t.string "selected_attacker"
+    t.string "selected_target"
+    t.boolean "selected_has_attacked"
+    t.boolean "first_turn"
+    t.string "winner"
+    t.string "selected_card"
   end
 
   create_table "users", force: :cascade do |t|
