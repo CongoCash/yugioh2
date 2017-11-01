@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   get 'api/cards', to: 'api#cards'
   get 'api/decks', to: 'api#decks'
+  get 'api/games', to: 'api#allgames'
   get 'api/games/:id', to: 'api#games'
 
   get '/start', to: 'start#new'

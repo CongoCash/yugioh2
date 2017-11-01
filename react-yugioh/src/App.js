@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 // import Deck from '../src/containers/deck/Deck.js'
+import Start from '../src/containers/start/Start.js'
 import Game from '../src/containers/game/Game.js'
 import Cable from 'actioncable'
 
@@ -70,6 +71,7 @@ class App extends Component {
         return (
             <div className="App">
                 <div className='stage'>
+                    <Start />
                     <h1>Chat</h1>
                     <div className='chat-logs'>
                     </div>
@@ -89,7 +91,6 @@ class App extends Component {
                         { this.renderChatLog() }
                     </ul>
                 </div>
-                <Game />
             </div>
         );
     }
