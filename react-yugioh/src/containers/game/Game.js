@@ -205,10 +205,18 @@ class Game extends Component {
 
     setSpell(e) {
         if (this.state.turn === 'player1') {
-            this.state.hand1.find((spell) => {
-                
+            let spell_index = this.state.hand1.findIndex((spell) => {
+                return spell.image_url === e.target.src
             })
+            this.state.spell_field1.push(this.state.hand1[spell_index])
+            this.state.hand1.splice(spell_index, 1)
+            this.setState({
+                spell_field1: this.state.spell_field1,
+                hand1: this.state.hand1
+            })
+            //check the spell field, dark hole is not appearing when it is setx
         }
+
     }
 
     playMonster(e) {
