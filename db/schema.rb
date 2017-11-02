@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171102010817) do
+ActiveRecord::Schema.define(version: 20171102070848) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,6 +79,8 @@ ActiveRecord::Schema.define(version: 20171102010817) do
     t.boolean "first_turn", default: true
     t.string "winner", default: ""
     t.string "selected_card", default: ""
+    t.boolean "spell_slots1", default: [false, false, false, false, false], array: true
+    t.boolean "spell_slots2", default: [false, false, false, false, false], array: true
   end
 
   create_table "kaibas", force: :cascade do |t|
@@ -98,6 +100,8 @@ ActiveRecord::Schema.define(version: 20171102010817) do
     t.boolean "faceup", default: false
     t.string "image_url"
     t.boolean "selected_sac", default: false
+    t.string "facedown_spell", default: "https://i.pinimg.com/originals/ed/b7/02/edb702c8400d4b0c806d964380b03b6a.jpg"
+    t.string "facedown_def", default: "http://vignette3.wikia.nocookie.net/yugioh/images/6/68/Face_Down_Defense_Position.png/revision/latest?cb=20100726091546"
   end
 
   create_table "two_players", force: :cascade do |t|
@@ -156,6 +160,8 @@ ActiveRecord::Schema.define(version: 20171102010817) do
     t.boolean "faceup", default: false
     t.string "image_url"
     t.boolean "selected_sac", default: false
+    t.string "facedown_spell", default: "https://i.pinimg.com/originals/ed/b7/02/edb702c8400d4b0c806d964380b03b6a.jpg"
+    t.string "facedown_def", default: "http://vignette3.wikia.nocookie.net/yugioh/images/6/68/Face_Down_Defense_Position.png/revision/latest?cb=20100726091546"
   end
 
 end

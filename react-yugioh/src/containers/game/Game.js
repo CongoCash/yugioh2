@@ -53,8 +53,11 @@ class Game extends Component {
                 selected_has_attacked: res.data.game.selected_has_attacked, first_turn: res.data.game.first_turn,
                 winner: res.data.game.winner, selected_card: res.data.game.selected_card,
                 monster_slots1: res.data.game.monster_slots1, monster_slots2: res.data.game.monster_slots2,
+                spell_slots1: res.data.game.spell_slots1, spell_slots2: res.data.game.spell_slots2,
+
             }, function() {
                 this.getInitialCards()
+                console.log(this.state.spell_slots2)
             })
         })
     }
@@ -206,13 +209,17 @@ class Game extends Component {
     setSpell(e) {
         if (this.state.turn === 'player1') {
             let spell_index = this.state.hand1.findIndex((spell) => {
-                return spell.image_url === e.target.src
+                return spell === this.state.selected_monster
             })
             this.state.spell_field1.push(this.state.hand1[spell_index])
             this.state.hand1.splice(spell_index, 1)
+            this.state.spell_slots1.pop()
             this.setState({
                 spell_field1: this.state.spell_field1,
-                hand1: this.state.hand1
+                hand1: this.state.hand1,
+                spell_slots1: this.state.spell_slots1
+            }, function() {
+                console.log(this.state.spell_field1, 'spell field')
             })
             //check the spell field, dark hole is not appearing when it is setx
         }
@@ -237,7 +244,8 @@ class Game extends Component {
                         hand1: this.state.hand1,
                         monster_played: true,
                         monster_selected: false,
-                        monster_field1: this.state.monster_field1
+                        monster_field1: this.state.monster_field1,
+                        monster_slots1: this.state.monster_slots1
                     }, function () {
                         console.log(this.state.monster_field1)
                     })
@@ -760,19 +768,19 @@ class Game extends Component {
         let winCondition = (this.state.winner.length !== 0)
         console.log(this.state.selected_monster, 'monster selected stars')
         return(
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row">
                     <div className="col-sm-1">
-                        <img onClick={this.drawCard.bind(this)} alt="Deck 2" height="100" width="60" src={"https://i.pinimg.com/originals/ed/b7/02/edb702c8400d4b0c806d964380b03b6a.jpg"}/>
+                        <img onClick={this.drawCard.bind(this)} alt="Deck 2" height="100" width="68" src={"https://i.pinimg.com/originals/ed/b7/02/edb702c8400d4b0c806d964380b03b6a.jpg"}/>
                     </div>
-                    <div className="col-sm-8">
+                    <div className="col-sm-5">
                         <Board
                             hand1={this.state.hand1.map((card) => {
                                 return(
                                     this.state.turn === 'player1' ?
-                                    <img onClick={this.selectMonster.bind(this)} className="col-sm-2 player1 card"
+                                    <img onClick={this.selectMonster.bind(this)} className="col-sm-1 player1 card"
                                          height="100" width="68" src={card.image_url}/> :
-                                        <img alt="Hand 1" height="100" width="60"
+                                        <img alt="Hand 1" height="100" width="68"
                                              src={"https://i.pinimg.com/originals/ed/b7/02/edb702c8400d4b0c806d964380b03b6a.jpg"}/>
 
 
@@ -781,9 +789,9 @@ class Game extends Component {
                             hand2={this.state.hand2.map((card) => {
                                 return(
                                     this.state.turn === 'player2' ?
-                                        <img onClick={this.selectMonster.bind(this)} className="col-sm-2 player2 card"
+                                        <img onClick={this.selectMonster.bind(this)} className="col-sm-1 player2 card"
                                              height="100" width="68" src={card.image_url}/> :
-                                        <img alt="Hand 1" height="100" width="60"
+                                        <img alt="Hand 1" height="100" width="68"
                                              src={"https://i.pinimg.com/originals/ed/b7/02/edb702c8400d4b0c806d964380b03b6a.jpg"}/>
                                 )
                             })}
@@ -791,98 +799,106 @@ class Game extends Component {
                             monster_slots1 = {this.state.monster_slots1}
                             monster_field2={this.state.monster_field2}
                             monster_slots2 = {this.state.monster_slots2}
+                            spell_field1={this.state.spell_field1}
+                            spell_slots1 = {this.state.spell_slots1}
+                            spell_field2={this.state.spell_field2}
+                            spell_slots2 = {this.state.spell_slots2}
                             main_phase1_2={this.mainPhase1And2.bind(this)}
                             select_sacrifices={this.selectSacrifices.bind(this)}
                         />
-                        <img onClick={this.drawCard.bind(this)} alt="Deck 1" height="100" width="60" src={"https://i.pinimg.com/originals/ed/b7/02/edb702c8400d4b0c806d964380b03b6a.jpg"}/>
-                        <div className="col-sm-2">
-                            <button onClick={this.endPhase.bind(this)}>End Phase</button>
-                        </div>
-                        <div className="col-sm-4">
-                            {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1
-                            && this.state.spell_field2.length < 5 && this.state.selected_monster.card_type ==="Spell"
-                            && this.state.turn === "player1"?
-                                <span>
-                                    <button onClick={this.setSpell.bind(this)}>Set Spell</button>
-                                </span>: ""
-                            }
-                            {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1
-                            && this.state.spell_field2.length < 5 && this.state.selected_monster.card_type ==="Spell"
-                            && this.state.turn === "player2"?
-                                <span>
-                                    <button onClick={this.setSpell.bind(this)}>Set Spell</button>
-                                </span>: ""
-                            }
-                            {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
-                                this.state.selected_monster.stars <= 4 && this.state.monster_field1.length < 5
-                                && this.state.turn === "player1" && this.state.selected_monster.card_type ==="Monster" ?
-                                <span>
-                                    <button onClick={this.playMonster.bind(this)}>Set Attack</button>
-                                    <button onClick={this.playMonster.bind(this)}>Set Defense</button>
-                                </span>: ""
-                            }
-                            {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
-                            this.state.selected_monster.stars <= 4 && this.state.monster_field2.length < 5
-                            && this.state.turn === "player2" && this.state.selected_monster.card_type ==="Monster"?
-                                <span>
-                                    <button onClick={this.playMonster.bind(this)}>Set Attack</button>
-                                    <button onClick={this.playMonster.bind(this)}>Set Defense</button>
-                                </span>: ""
-                            }
-                            {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
-                            this.state.selected_monster.stars > 4 && this.state.selected_monster.stars < 7
-                            && this.state.selected_sacrifices.length === 1 && this.state.selected_monster.card_type ==="Monster"?
-                                <span>
-                                    <button onClick={this.summonMonster.bind(this)}>Set Attack</button>
-                                    <button onClick={this.summonMonster.bind(this)}>Set Defense</button>
-                                </span>: ""
-                            }
-                            {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
-                            this.state.selected_monster.stars >= 7 && this.state.selected_sacrifices.length === 2
-                            && this.state.selected_monster.card_type ==="Monster"?
-                                <span>
-                                    <button onClick={this.summonMonster.bind(this)}>Sac 2 Set Attack</button>
-                                    <button onClick={this.summonMonster.bind(this)}>Set Defense</button>
-                                </span>: ""
-                            }
-                            {!this.state.selected_monster.has_changed_battle_position && !this.state.selected_monster.has_attacked
-                            && this.state.phase === 3 && this.state.monster_selected
-                            && this.state.selected_monster.position === 'defense'?
-                                <span>
-                                <button onClick={this.switchPosition.bind(this)}>Switch to Attack Mode MP2</button>
-                            </span>: ""
-                            }
-                            {!this.state.selected_monster.has_changed_battle_position && !this.state.selected_monster.has_attacked
-                            && this.state.phase === 3 && this.state.monster_selected
-                            && this.state.selected_monster.position === 'attack'?
-                                <span>
-                                <button onClick={this.switchPosition.bind(this)}>Switch to Defense Mode MP2</button>
-                            </span>: ""
-                            }
-                            {attack_button ?
-                                <span>
-                                <button onClick={this.attack.bind(this)}>Attack</button>
-                            </span> : ""
-                            }
-                        </div>
                     </div>
+
                     <div className="col-sm-3">
                         <h1>{winCondition ? <span>{this.state.winner} has won</span>: ""}</h1>
                         <h2>{this.state.turn} - Phase: {phase ? this.state.phase_name[this.state.phase] : this.state.phase_name[this.state.phase]}</h2>
                         <h3>Lifepoints Player 1: {this.state.lifepoints1} --- Lifepoints Player 2: {this.state.lifepoints2}</h3>
                         <hr></hr>
+                        <button className="btn btn-primary" onClick={this.endPhase.bind(this)}>End Phase</button>
+                        {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1
+                        && this.state.spell_field2.length < 5 && this.state.selected_monster.card_type ==="Spell"
+                        && this.state.turn === "player1"?
+                            <span>
+                                <button onClick={this.setSpell.bind(this)}>Set Spell</button>
+                            </span>: ""
+                        }
+                        {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1
+                        && this.state.spell_field2.length < 5 && this.state.selected_monster.card_type ==="Spell"
+                        && this.state.turn === "player2"?
+                            <span>
+                                <button onClick={this.setSpell.bind(this)}>Set Spell</button>
+                            </span>: ""
+                        }
+                        {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
+                        this.state.selected_monster.stars <= 4 && this.state.monster_field1.length < 5
+                        && this.state.turn === "player1" && this.state.selected_monster.card_type ==="Monster" ?
+                            <span>
+                                <button className="btn btn-danger" onClick={this.playMonster.bind(this)}>Set Attack</button>
+                                <button className="btn btn-success" onClick={this.playMonster.bind(this)}>Set Defense</button>
+                            </span>: ""
+                        }
+                        {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
+                        this.state.selected_monster.stars <= 4 && this.state.monster_field2.length < 5
+                        && this.state.turn === "player2" && this.state.selected_monster.card_type ==="Monster"?
+                            <span>
+                                <button className="btn btn-danger" onClick={this.playMonster.bind(this)}>Set Attack</button>
+                                <button className="btn btn-success" onClick={this.playMonster.bind(this)}>Set Defense</button>
+                            </span>: ""
+                        }
+                        {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
+                        this.state.selected_monster.stars > 4 && this.state.selected_monster.stars < 7
+                        && this.state.selected_sacrifices.length === 1 && this.state.selected_monster.card_type ==="Monster"?
+                            <span>
+                                <button className="btn btn-danger" onClick={this.summonMonster.bind(this)}>Set Attack</button>
+                                <button className="btn btn-success" onClick={this.summonMonster.bind(this)}>Set Defense</button>
+                            </span>: ""
+                        }
+                        {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
+                        this.state.selected_monster.stars >= 7 && this.state.selected_sacrifices.length === 2
+                        && this.state.selected_monster.card_type ==="Monster"?
+                            <span>
+                                <button className="btn btn-danger" onClick={this.summonMonster.bind(this)}>Sac 2 Set Attack</button>
+                                <button className="btn btn-success" onClick={this.summonMonster.bind(this)}>Set Defense</button>
+                            </span>: ""
+                        }
+                        {!this.state.selected_monster.has_changed_battle_position && !this.state.selected_monster.has_attacked
+                        && this.state.phase === 3 && this.state.monster_selected
+                        && this.state.selected_monster.position === 'defense'?
+                            <span>
+                            <button className="btn btn-danger" onClick={this.switchPosition.bind(this)}>Switch to Attack Mode MP2</button>
+                        </span>: ""
+                        }
+                        {!this.state.selected_monster.has_changed_battle_position && !this.state.selected_monster.has_attacked
+                        && this.state.phase === 3 && this.state.monster_selected
+                        && this.state.selected_monster.position === 'attack'?
+                            <span>
+                            <button className="btn btn-success" onClick={this.switchPosition.bind(this)}>Switch to Defense Mode MP2</button>
+                        </span>: ""
+                        }
+                        {attack_button ?
+                            <span>
+                            <button className="btn btn-danger" onClick={this.attack.bind(this)}>Attack</button>
+                        </span> : ""
+                        }
+                    </div>
+
+                    <div className="col-sm-3">
                         {this.state.selected_card ?
                             (<h3><div>{this.state.selected_card.card_name}</div>
                                 <div>Attack: {this.state.selected_card.attack}</div>
                                 <div>Defense: {this.state.selected_card.defense}</div>
                                 <div>Stars: {this.state.selected_card.stars}</div>
                                 <div>Description: <h4>{this.state.selected_card.description}</h4></div>
-                                <img src={this.state.selected_card.image_url} height="430" width="295"/>
+                                <img src={this.state.selected_card.image_url} height="291" width="200"/>
                             </h3>) : ""
                         }
                     </div>
                 </div>
-            </div>
+                    <div className="row">
+                        <div className="col-sm-1">
+                            <img onClick={this.drawCard.bind(this)} alt="Deck 1" height="100" width="68" src={"https://i.pinimg.com/originals/ed/b7/02/edb702c8400d4b0c806d964380b03b6a.jpg"}/>
+                        </div>
+                    </div>
+                </div>
         )
     }
 }

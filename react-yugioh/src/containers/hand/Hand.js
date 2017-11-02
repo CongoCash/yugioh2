@@ -7,8 +7,8 @@ class Hand extends Component {
 
     render() {
         return(
-            <div className="row card">
-                <div className="col-sm-6">
+            <div className="row cardjjjj">
+                <div className="col-sm-12">
                     {this.props.hand}
                 </div>
             </div>
