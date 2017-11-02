@@ -28,7 +28,7 @@ class Board extends Component {
                         <Spell_field
                             spell_field={this.props.spell_field2.map((spell) => {
                                 return(
-                                    <img id={"p2s" + spell.id} className="col-sm-1 player2 card" height="100" width="68" src={spell.image_url}/>
+                                    <img onClick={this.props.select_spell} id={"p2s" + spell.id} className="col-sm-1 player2 card" height="100" width="68" src={"https://i.pinimg.com/originals/ed/b7/02/edb702c8400d4b0c806d964380b03b6a.jpg"}/>
                                 )
                             })}
                             spell_slots={this.props.spell_slots2.map((slot) => {

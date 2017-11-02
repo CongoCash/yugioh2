@@ -19,8 +19,15 @@ class Start extends Component {
     }
 
     fetchData(){
-        GamesModel.create(2)
+        GamesModel.all().then((res) => {
+            this.setState({
+                available_games: res.data
+            })
+        })
+    }
 
+    createGame() {
+        GamesModel.create()
         GamesModel.all().then((res) => {
             this.setState({
                 available_games: res.data
@@ -35,6 +42,10 @@ class Start extends Component {
         })
     }
 
+    deleteGame(id) {
+        GamesModel.destroy(id)
+    }
+
     render() {
 
         return (
@@ -42,9 +53,13 @@ class Start extends Component {
             {!this.state.game_been_clicked ?
                 this.state.available_games.map((game) => {
                     return(
-                        <button onClick={this.startGame.bind(this)}>Game {game.id}</button>
+                        <div>
+                            <button className="btn btn-primary" onClick={this.startGame.bind(this)}>Game {game.id}</button>
+                            <button className="btn btn-danger" onClick={() => this.deleteGame(game.id)}>Delete</button>
+                        </div>
                     )
                 }) : ""}
+                <button className="btn btn-success" onClick={this.createGame.bind(this)}>Create Game</button>
                 {this.state.selected_id ?
                     <Game
                         game_id={this.state.selected_id}

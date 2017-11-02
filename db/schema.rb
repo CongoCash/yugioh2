@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171102070848) do
+ActiveRecord::Schema.define(version: 20171102170927) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -102,6 +102,7 @@ ActiveRecord::Schema.define(version: 20171102070848) do
     t.boolean "selected_sac", default: false
     t.string "facedown_spell", default: "https://i.pinimg.com/originals/ed/b7/02/edb702c8400d4b0c806d964380b03b6a.jpg"
     t.string "facedown_def", default: "http://vignette3.wikia.nocookie.net/yugioh/images/6/68/Face_Down_Defense_Position.png/revision/latest?cb=20100726091546"
+    t.boolean "spell_played", default: false
   end
 
   create_table "two_players", force: :cascade do |t|
@@ -162,6 +163,7 @@ ActiveRecord::Schema.define(version: 20171102070848) do
     t.boolean "selected_sac", default: false
     t.string "facedown_spell", default: "https://i.pinimg.com/originals/ed/b7/02/edb702c8400d4b0c806d964380b03b6a.jpg"
     t.string "facedown_def", default: "http://vignette3.wikia.nocookie.net/yugioh/images/6/68/Face_Down_Defense_Position.png/revision/latest?cb=20100726091546"
+    t.boolean "spell_played", default: false
   end
 
 end

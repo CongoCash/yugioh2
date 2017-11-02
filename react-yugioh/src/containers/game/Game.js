@@ -24,8 +24,8 @@ class Game extends Component {
             selected_attacker: '', selected_target: '',
             selected_has_attacked: '', first_turn: '',
             winner: '', selected_card: '', current_move: '',
-            exodia1: [], exodia2: [],
-            selected_sacrifices: [],
+            exodia1: [], exodia2: [], selected_sacrifices: [],
+            selected_spell: '',
         }
     }
 
@@ -68,7 +68,7 @@ class Game extends Component {
         YugisModel.cards().then((res) => {
             let data = res.data
             let shuffle_deck1 = shuffle(data)
-            let hand1 = shuffle_deck1.slice(0,5)
+            let hand1 = shuffle_deck1.slice(0,30)
             let deck1 = shuffle_deck1.slice(5)
 
             this.setState({
@@ -82,7 +82,7 @@ class Game extends Component {
         KaibasModel.cards().then((res) => {
             let data = res.data
             let shuffle_deck2 = shuffle(data)
-            let hand2 = shuffle_deck2.slice(0,5)
+            let hand2 = shuffle_deck2.slice(0,30)
             let deck2 = shuffle_deck2.slice(5)
 
             this.setState({
@@ -99,7 +99,7 @@ class Game extends Component {
             monster_selected: false, monster_played: false,
             has_drawn: false,
             selected_monster: "", selected_attacker: "",
-            selected_target: "",
+            selected_target: "", selected_spell: "",
             attacker_selected: false, target_selected: false,
             selected_has_attacked: false,
         })
@@ -211,6 +211,7 @@ class Game extends Component {
             let spell_index = this.state.hand1.findIndex((spell) => {
                 return spell === this.state.selected_monster
             })
+            this.state.hand1[spell_index].spell_played = true
             this.state.spell_field1.push(this.state.hand1[spell_index])
             this.state.hand1.splice(spell_index, 1)
             this.state.spell_slots1.pop()
@@ -221,22 +222,82 @@ class Game extends Component {
             }, function() {
                 console.log(this.state.spell_field1, 'spell field')
             })
-            //check the spell field, dark hole is not appearing when it is setx
+        }
+
+        else if (this.state.turn === 'player2') {
+            console.log(this.state.selected_monster)
+            let spell_index = this.state.hand2.findIndex((spell) => {
+                console.log(spell)
+                return spell === this.state.selected_monster
+            })
+            console.log(spell_index, 'spell index')
+            this.state.hand2[spell_index].spell_played = true
+            this.state.spell_field2.push(this.state.hand1[spell_index])
+            this.state.hand2.splice(spell_index, 1)
+            this.state.spell_slots2.pop()
+            this.setState({
+                spell_field2: this.state.spell_field2,
+                hand2: this.state.hand2,
+                spell_slots2: this.state.spell_slots2
+            }, function() {
+                console.log(this.state.spell_field2, 'spell field')
+            })
         }
 
     }
 
     selectSpell(e){
+        console.log('enter selectSpell')
         if (this.state.turn === 'player1') {
             let find_spell = this.state.spell_field1.find((spell) => {
                 return spell.id == e.target.id.split('p1s')[1]
             })
             this.setState({
-                selected_card: find_spell
+                selected_card: find_spell,
+                selected_spell: find_spell
             })
         }
 
+        else if (this.state.turn === 'player2') {
+            let find_spell = this.state.spell_field2.find((spell) => {
+                return spell.id == e.target.id.split('p2s')[1]
+            })
+            this.setState({
+                selected_card: find_spell,
+                selected_spell: find_spell
+            })
+        }
     }
+
+    playSpell() {
+        console.log(this.state.spell_slots1, 'spell slots before')
+        if (this.state.selected_spell.card_name === 'Dark Hole') {
+            this.state.monster_field1 = []
+            this.state.monster_field2 = []
+            if (this.state.turn === 'player1') {
+                let spell_index = this.state.spell_field1.findIndex((spell) => {
+                    return spell.card_name === 'Dark Hole'
+                })
+                this.state.spell_field1.splice(spell_index, 1)
+                this.state.spell_slots1.push(false)
+            }
+            else if (this.state.turn === 'player2') {
+                let spell_index = this.state.spell_field2.findIndex((spell) => {
+                    return spell.card_name === 'Dark Hole'
+                })
+                this.state.spell_field1.splice(spell_index, 1)
+                this.state.spell_slots2.push(false)
+            }
+            this.setState({
+                monster_field1: [], monster_field2: [],
+                spell_field1: this.state.spell_field1, spell_field2: this.state.spell_field2,
+                spell_slots1: this.state.spell_slots1, spell_slots2: this.state.spell_slots2,
+                monster_slots1: [false, false ,false, false, false], monster_slots2: [false, false, false, false, false],
+                selected_spell: ""
+            })
+        }
+    }
+
 
     playMonster(e) {
         if (this.state.monster_played === false && this.state.selected_monster.stars <= 4) {
@@ -373,9 +434,64 @@ class Game extends Component {
             }
         }
 
+
+        if (this.state.phase === 1 && this.state.turn === 'player2'
+            && this.state.selected_monster.stars > 4 && this.state.selected_monster.stars < 7) {
+            let sacrifice = this.state.monster_field2.find((monster) => {
+                console.log(monster.image_url === e.target.src)
+                return monster.image_url === e.target.src
+            })
+            console.log(sacrifice, 'what is this sacrifice)')
+            if (sacrifice.selected_sac === false) {
+                this.state.selected_sacrifices[0] = sacrifice
+                sacrifice.selected_sac = true
+                console.log(sacrifice, 'is this coming in before selected sacrifices state')
+            }
+            this.setState({
+                selected_sacrifices: this.state.selected_sacrifices
+            }, function() {
+                console.log(this.state.selected_sacrifices, 'selected sacrifices state')
+            })
+            this.state.monster_field1.forEach((monster) => {
+                console.log('the end')
+                monster.selected_sac = false
+            })
+        }
+
+        if (this.state.phase === 1 && this.state.turn === 'player2'
+            && this.state.selected_monster.stars >= 7) {
+            let sacrifice = this.state.monster_field2.find((monster) => {
+                return (monster.image_url === e.target.src && monster.selected_sac === false)
+            })
+            if (this.state.selected_sacrifices.length < 2) {
+                sacrifice.selected_sac === true
+                this.state.selected_sacrifices.push(sacrifice)
+                console.log(this.state.selected_sacrifices, 'before setting the state')
+                this.setState({
+                    selected_sacrifices: this.state.selected_sacrifices
+                }, function() {
+                    console.log(this.state.selected_sacrifices, 'after setting the state')
+                })
+            }
+
+            else if (this.state.selected_sacrifices.length >= 2) {
+                sacrifice.selected_sac === true
+                this.state.selected_sacrifices.shift()
+                this.state.selected_sacrifices.push(sacrifice)
+
+                this.setState({
+                    selected_sacrifices: this.state.selected_sacrifices
+                }, function() {
+                    console.log(this.state.selected_sacrifices, 'greater than 2 sacrifices')
+                })
+            }
+        }
+
     }
 
     summonMonster(e) {
+        console.log('entering summon')
+        this.state.selected_monster.position = 'attack'
         if (this.state.turn === 'player1' && this.state.selected_monster.stars > 4) {
             this.state.selected_sacrifices.forEach((sacrifice, index) => {
                 let sac_index = this.state.monster_field1.findIndex((monster) => {
@@ -394,6 +510,27 @@ class Game extends Component {
                 monster_selected: false,
                 selected_monster: "",
                 hand1: this.state.hand1
+            })
+        }
+
+        else if (this.state.turn === 'player2' && this.state.selected_monster.stars > 4) {
+            this.state.selected_sacrifices.forEach((sacrifice, index) => {
+                let sac_index = this.state.monster_field2.findIndex((monster) => {
+                    return monster === sacrifice
+                })
+                this.state.monster_field2.splice(sac_index, 1)
+            })
+            this.state.monster_field2.push(this.state.selected_monster)
+            let hand_index = this.state.hand2.findIndex((card) => {
+                return card === this.state.selected_monster
+            })
+            this.state.hand2.splice(hand_index, 1)
+            this.setState({
+                monster_field2: this.state.monster_field2,
+                selected_sacrifice: [],
+                monster_selected: false,
+                selected_monster: "",
+                hand2: this.state.hand2
             })
         }
     }
@@ -476,11 +613,10 @@ class Game extends Component {
     }
 
     selectAttackTarget(e) {
-
+        console.log(e.target.id.split('m'))
         let monster = this.state.monster_field1.concat(this.state.monster_field2).find((monster) => {
-            return monster.id === e.target.id
+            return monster.id == e.target.id.split('m')[1]
         })
-
         this.setState({
             selected_card: monster
         })
@@ -828,19 +964,22 @@ class Game extends Component {
                         <h3>Lifepoints Player 1: {this.state.lifepoints1} --- Lifepoints Player 2: {this.state.lifepoints2}</h3>
                         <hr></hr>
                         <button className="btn btn-primary" onClick={this.endPhase.bind(this)}>End Phase</button>
-                        {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1
-                        && this.state.spell_field2.length < 5 && this.state.selected_monster.card_type ==="Spell"
+                        {this.state.monster_selected && !this.state.selected_monster.spell_played && this.state.phase === 1
+                        && this.state.spell_field1.length < 5 && this.state.selected_monster.card_type ==="Spell"
                         && this.state.turn === "player1"?
                             <span>
                                 <button onClick={this.setSpell.bind(this)}>Set Spell</button>
                             </span>: ""
                         }
-                        {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1
+                        {this.state.monster_selected && !this.state.selected_monster.spell_played && this.state.phase === 1
                         && this.state.spell_field2.length < 5 && this.state.selected_monster.card_type ==="Spell"
                         && this.state.turn === "player2"?
                             <span>
                                 <button onClick={this.setSpell.bind(this)}>Set Spell</button>
                             </span>: ""
+                        }
+                        {this.state.selected_spell.length != "" && (this.state.phase === 1 || this.state.phase === 3) ?
+                            <button className="btn btn-danger" onClick={this.playSpell.bind(this)}>Play Spell</button> : ""
                         }
                         {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
                         this.state.selected_monster.stars <= 4 && this.state.monster_field1.length < 5

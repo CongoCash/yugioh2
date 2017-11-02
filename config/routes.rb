@@ -15,7 +15,9 @@ Rails.application.routes.draw do
   get 'api/kaiba', to: 'api#kaiba'
   get 'api/decks', to: 'api#decks'
   get 'api/games', to: 'api#allgames'
+  post 'api/games', to: 'api#createGame'
   get 'api/games/:id', to: 'api#games'
+  delete 'api/games/:id', to: 'api#delete'
 
   get '/start', to: 'start#new'
   post '/games', to: 'start#create'

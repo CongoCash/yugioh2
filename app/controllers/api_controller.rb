@@ -24,4 +24,12 @@ class ApiController < ApplicationController
     @kaibas = Kaiba.all()
   end
 
+  def createGame
+    Game.create()
+  end
+
+  def delete
+    Game.destroy(params[:id])
+  end
+
 end

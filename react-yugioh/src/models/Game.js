@@ -12,11 +12,13 @@ class GamesModel {
         return request
     }
 
-    static create(new_id){
-        let request = axios.post("http://localhost:3000/api/games/",
-        {
-            id: new_id
-        })
+    static create(){
+        let request = axios.post("http://localhost:3000/api/games")
+        return request
+    }
+
+    static destroy(id) {
+        let request = axios.delete("http://localhost:3000/api/games/" + id)
         return request
     }
 
