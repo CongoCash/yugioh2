@@ -203,6 +203,14 @@ class Game extends Component {
         }
     }
 
+    setSpell(e) {
+        if (this.state.turn === 'player1') {
+            this.state.hand1.find((spell) => {
+                
+            })
+        }
+    }
+
     playMonster(e) {
         if (this.state.monster_played === false && this.state.selected_monster.stars <= 4) {
             if (e.target.innerHTML === "Set Attack") {
@@ -783,9 +791,23 @@ class Game extends Component {
                             <button onClick={this.endPhase.bind(this)}>End Phase</button>
                         </div>
                         <div className="col-sm-4">
+                            {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1
+                            && this.state.spell_field2.length < 5 && this.state.selected_monster.card_type ==="Spell"
+                            && this.state.turn === "player1"?
+                                <span>
+                                    <button onClick={this.setSpell.bind(this)}>Set Spell</button>
+                                </span>: ""
+                            }
+                            {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1
+                            && this.state.spell_field2.length < 5 && this.state.selected_monster.card_type ==="Spell"
+                            && this.state.turn === "player2"?
+                                <span>
+                                    <button onClick={this.setSpell.bind(this)}>Set Spell</button>
+                                </span>: ""
+                            }
                             {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
                                 this.state.selected_monster.stars <= 4 && this.state.monster_field1.length < 5
-                                && this.state.turn === "player1"?
+                                && this.state.turn === "player1" && this.state.selected_monster.card_type ==="Monster" ?
                                 <span>
                                     <button onClick={this.playMonster.bind(this)}>Set Attack</button>
                                     <button onClick={this.playMonster.bind(this)}>Set Defense</button>
@@ -793,7 +815,7 @@ class Game extends Component {
                             }
                             {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
                             this.state.selected_monster.stars <= 4 && this.state.monster_field2.length < 5
-                            && this.state.turn === "player2"?
+                            && this.state.turn === "player2" && this.state.selected_monster.card_type ==="Monster"?
                                 <span>
                                     <button onClick={this.playMonster.bind(this)}>Set Attack</button>
                                     <button onClick={this.playMonster.bind(this)}>Set Defense</button>
@@ -801,14 +823,15 @@ class Game extends Component {
                             }
                             {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
                             this.state.selected_monster.stars > 4 && this.state.selected_monster.stars < 7
-                            && this.state.selected_sacrifices.length === 1?
+                            && this.state.selected_sacrifices.length === 1 && this.state.selected_monster.card_type ==="Monster"?
                                 <span>
                                     <button onClick={this.summonMonster.bind(this)}>Set Attack</button>
                                     <button onClick={this.summonMonster.bind(this)}>Set Defense</button>
                                 </span>: ""
                             }
                             {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
-                            this.state.selected_monster.stars >= 7 && this.state.selected_sacrifices.length === 2?
+                            this.state.selected_monster.stars >= 7 && this.state.selected_sacrifices.length === 2
+                            && this.state.selected_monster.card_type ==="Monster"?
                                 <span>
                                     <button onClick={this.summonMonster.bind(this)}>Sac 2 Set Attack</button>
                                     <button onClick={this.summonMonster.bind(this)}>Set Defense</button>
