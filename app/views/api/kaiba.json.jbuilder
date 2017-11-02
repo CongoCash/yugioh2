@@ -2,4 +2,4 @@
 
 json.array! @kaibas, :id, :card_name, :attack, :defense, :description,
             :selected, :position, :has_attacked, :faceup, :has_changed_battle_position,
-            :image_url, :stars
+            :image_url, :stars, :seleted_sac, :card_type

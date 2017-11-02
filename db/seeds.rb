@@ -15,7 +15,8 @@ yugi_monsters = ['Battle%20Steer', 'Beaver%20Warrior', 'Celtic%20Guardian',
                  'Left%20Leg%20of%20the%20Forbidden%20One', 'Mammoth%20Graveyard', 'Mystical%20Elf',
                  'Right%20Arm%20of%20the%20Forbidden%20One', 'Right%20Leg%20of%20the%20Forbidden%20One',
                  'Rude%20Kaiser', 'Silver%20Fang', 'Summoned%20Skull',
-                 'Torike', 'Zombie%20Warrior', 'Exodia%20the%20Forbidden%20One']
+                 'Torike', 'Zombie%20Warrior', 'Exodia%20the%20Forbidden%20One',
+                 'Dark%20Hole']
 
 kaiba_monsters = [
   'Battle%20Ox',
@@ -43,7 +44,7 @@ for i in 0..yugi_monsters.length-1
     attack: json['attack'],
     defense: json['defense'],
     stars: json['stars'],
-    card_type: json['monster'],
+    card_type: json['type'],
     description: json['text'],
     image_url: json['image_path'],
               })
@@ -57,7 +58,7 @@ for j in 0..kaiba_monsters.length-1
                 attack: json['attack'],
                 defense: json['defense'],
                 stars: json['stars'],
-                card_type: json['monster'],
+                card_type: json['type'],
                 description: json['text'],
                 image_url: json['image_path'],
               })

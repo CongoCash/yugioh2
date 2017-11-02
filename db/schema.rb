@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171101184631) do
+ActiveRecord::Schema.define(version: 20171102010817) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20171101184631) do
     t.boolean "has_changed_battle_position", default: false
     t.boolean "faceup", default: false
     t.string "image_url"
+    t.boolean "selected_sax", default: false
   end
 
   create_table "chat_messages", force: :cascade do |t|
@@ -96,6 +97,7 @@ ActiveRecord::Schema.define(version: 20171101184631) do
     t.boolean "has_changed_battle_position", default: false
     t.boolean "faceup", default: false
     t.string "image_url"
+    t.boolean "selected_sac", default: false
   end
 
   create_table "two_players", force: :cascade do |t|
@@ -153,6 +155,7 @@ ActiveRecord::Schema.define(version: 20171101184631) do
     t.boolean "has_changed_battle_position", default: false
     t.boolean "faceup", default: false
     t.string "image_url"
+    t.boolean "selected_sac", default: false
   end
 
 end

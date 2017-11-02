@@ -25,6 +25,7 @@ class Game extends Component {
             selected_has_attacked: '', first_turn: '',
             winner: '', selected_card: '', current_move: '',
             exodia1: [], exodia2: [],
+            selected_sacrifices: [],
         }
     }
 
@@ -170,7 +171,7 @@ class Game extends Component {
             console.log(card, 'looping through cards')
             return (card.image_url === e.target.src)
         })
-        if (this.state.turn === 'player1' && this.state.monster.stars <= 4) {
+        if (this.state.turn === 'player1') {
             this.setState({
                 selected_card: monster,
             }, function () {
@@ -203,7 +204,7 @@ class Game extends Component {
     }
 
     playMonster(e) {
-        if (this.state.monster_played === false) {
+        if (this.state.monster_played === false && this.state.selected_monster.stars <= 4) {
             if (e.target.innerHTML === "Set Attack") {
                 this.state.selected_monster.position = "attack"
                 this.state.selected_monster.has_changed_battle_position = true
@@ -280,6 +281,84 @@ class Game extends Component {
                     })
                 }
             }
+        }
+    }
+
+    selectSacrifices(e) {
+        if (this.state.phase === 1 && this.state.turn === 'player1'
+        && this.state.selected_monster.stars > 4 && this.state.selected_monster.stars < 7) {
+            let sacrifice = this.state.monster_field1.find((monster) => {
+                console.log(monster.image_url === e.target.src)
+                return monster.image_url === e.target.src
+            })
+            console.log(sacrifice, 'what is this sacrifice)')
+            if (sacrifice.selected_sac === false) {
+                this.state.selected_sacrifices[0] = sacrifice
+                sacrifice.selected_sac = true
+                console.log(sacrifice, 'is this coming in before selected sacrifices state')
+            }
+            this.setState({
+                selected_sacrifices: this.state.selected_sacrifices
+            }, function() {
+                console.log(this.state.selected_sacrifices, 'selected sacrifices state')
+            })
+            this.state.monster_field1.forEach((monster) => {
+                console.log('the end')
+                monster.selected_sac = false
+            })
+        }
+
+        if (this.state.phase === 1 && this.state.turn === 'player1'
+            && this.state.selected_monster.stars >= 7) {
+            let sacrifice = this.state.monster_field1.find((monster) => {
+                return (monster.image_url === e.target.src && monster.selected_sac === false)
+            })
+            if (this.state.selected_sacrifices.length < 2) {
+                sacrifice.selected_sac === true
+                this.state.selected_sacrifices.push(sacrifice)
+                console.log(this.state.selected_sacrifices, 'before setting the state')
+                this.setState({
+                    selected_sacrifices: this.state.selected_sacrifices
+                }, function() {
+                    console.log(this.state.selected_sacrifices, 'after setting the state')
+                })
+            }
+
+            else if (this.state.selected_sacrifices.length >= 2) {
+                sacrifice.selected_sac === true
+                this.state.selected_sacrifices.shift()
+                this.state.selected_sacrifices.push(sacrifice)
+
+                this.setState({
+                    selected_sacrifices: this.state.selected_sacrifices
+                }, function() {
+                    console.log(this.state.selected_sacrifices, 'greater than 2 sacrifices')
+                })
+            }
+        }
+
+    }
+
+    summonMonster(e) {
+        if (this.state.turn === 'player1' && this.state.selected_monster.stars > 4) {
+            this.state.selected_sacrifices.forEach((sacrifice, index) => {
+                let sac_index = this.state.monster_field1.findIndex((monster) => {
+                    return monster === sacrifice
+                })
+                this.state.monster_field1.splice(sac_index, 1)
+            })
+            this.state.monster_field1.push(this.state.selected_monster)
+            let hand_index = this.state.hand1.findIndex((card) => {
+                return card === this.state.selected_monster
+            })
+            this.state.hand1.splice(hand_index, 1)
+            this.setState({
+                monster_field1: this.state.monster_field1,
+                selected_sacrifice: [],
+                monster_selected: false,
+                selected_monster: "",
+                hand1: this.state.hand1
+            })
         }
     }
 
@@ -556,6 +635,7 @@ class Game extends Component {
 
     mainPhase1And2(e) {
         this.selectAttackTarget(e)
+        this.selectSacrifices(e)
         this.mainPhase2(e)
     }
 
@@ -662,7 +742,7 @@ class Game extends Component {
             (this.state.phase === 2) &&
             (this.state.target_selected || this.state.monster_field1.length === 0 || this.state.monster_field2.length === 0)
         let winCondition = (this.state.winner.length !== 0)
-        console.log(this.state.monster_slots1)
+        console.log(this.state.selected_monster, 'monster selected stars')
         return(
             <div className="container">
                 <div className="row">
@@ -696,17 +776,43 @@ class Game extends Component {
                             monster_field2={this.state.monster_field2}
                             monster_slots2 = {this.state.monster_slots2}
                             main_phase1_2={this.mainPhase1And2.bind(this)}
+                            select_sacrifices={this.selectSacrifices.bind(this)}
                         />
                         <img onClick={this.drawCard.bind(this)} alt="Deck 1" height="100" width="60" src={"https://i.pinimg.com/originals/ed/b7/02/edb702c8400d4b0c806d964380b03b6a.jpg"}/>
                         <div className="col-sm-2">
                             <button onClick={this.endPhase.bind(this)}>End Phase</button>
                         </div>
                         <div className="col-sm-4">
-                            {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1?
+                            {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
+                                this.state.selected_monster.stars <= 4 && this.state.monster_field1.length < 5
+                                && this.state.turn === "player1"?
                                 <span>
-                                <button onClick={this.playMonster.bind(this)}>Set Attack</button>
-                                <button onClick={this.playMonster.bind(this)}>Set Defense</button>
-                            </span>: ""
+                                    <button onClick={this.playMonster.bind(this)}>Set Attack</button>
+                                    <button onClick={this.playMonster.bind(this)}>Set Defense</button>
+                                </span>: ""
+                            }
+                            {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
+                            this.state.selected_monster.stars <= 4 && this.state.monster_field2.length < 5
+                            && this.state.turn === "player2"?
+                                <span>
+                                    <button onClick={this.playMonster.bind(this)}>Set Attack</button>
+                                    <button onClick={this.playMonster.bind(this)}>Set Defense</button>
+                                </span>: ""
+                            }
+                            {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
+                            this.state.selected_monster.stars > 4 && this.state.selected_monster.stars < 7
+                            && this.state.selected_sacrifices.length === 1?
+                                <span>
+                                    <button onClick={this.summonMonster.bind(this)}>Set Attack</button>
+                                    <button onClick={this.summonMonster.bind(this)}>Set Defense</button>
+                                </span>: ""
+                            }
+                            {this.state.monster_selected && !this.state.monster_played && this.state.phase === 1 &&
+                            this.state.selected_monster.stars >= 7 && this.state.selected_sacrifices.length === 2?
+                                <span>
+                                    <button onClick={this.summonMonster.bind(this)}>Sac 2 Set Attack</button>
+                                    <button onClick={this.summonMonster.bind(this)}>Set Defense</button>
+                                </span>: ""
                             }
                             {!this.state.selected_monster.has_changed_battle_position && !this.state.selected_monster.has_attacked
                             && this.state.phase === 3 && this.state.monster_selected
