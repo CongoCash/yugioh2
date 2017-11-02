@@ -19,6 +19,8 @@ class Start extends Component {
     }
 
     fetchData(){
+        GamesModel.create(2)
+
         GamesModel.all().then((res) => {
             this.setState({
                 available_games: res.data

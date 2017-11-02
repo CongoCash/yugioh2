@@ -226,6 +226,18 @@ class Game extends Component {
 
     }
 
+    selectSpell(e){
+        if (this.state.turn === 'player1') {
+            let find_spell = this.state.spell_field1.find((spell) => {
+                return spell.id == e.target.id.split('p1s')[1]
+            })
+            this.setState({
+                selected_card: find_spell
+            })
+        }
+
+    }
+
     playMonster(e) {
         if (this.state.monster_played === false && this.state.selected_monster.stars <= 4) {
             if (e.target.innerHTML === "Set Attack") {
@@ -464,8 +476,9 @@ class Game extends Component {
     }
 
     selectAttackTarget(e) {
+
         let monster = this.state.monster_field1.concat(this.state.monster_field2).find((monster) => {
-            return monster.image_url === e.target.src
+            return monster.id === e.target.id
         })
 
         this.setState({
@@ -805,6 +818,7 @@ class Game extends Component {
                             spell_slots2 = {this.state.spell_slots2}
                             main_phase1_2={this.mainPhase1And2.bind(this)}
                             select_sacrifices={this.selectSacrifices.bind(this)}
+                            select_spell={this.selectSpell.bind(this)}
                         />
                     </div>
 

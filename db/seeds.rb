@@ -2,6 +2,7 @@ require 'open-uri'
 require 'httparty'
 Card.destroy_all
 Yugi.destroy_all
+Kaiba.destroy_all
 User.destroy_all
 Deck.destroy_all
 
@@ -14,26 +15,41 @@ yugi_monsters = ['Battle%20Steer', 'Beaver%20Warrior', 'Celtic%20Guardian',
                  'Horn%20Imp', 'Koumori%20Dragon', 'Left%20Arm%20of%20the%20Forbidden%20One',
                  'Left%20Leg%20of%20the%20Forbidden%20One', 'Mammoth%20Graveyard', 'Mystical%20Elf',
                  'Right%20Arm%20of%20the%20Forbidden%20One', 'Right%20Leg%20of%20the%20Forbidden%20One',
-                 'Rude%20Kaiser', 'Silver%20Fang', 'Summoned%20Skull',
-                 'Torike', 'Zombie%20Warrior', 'Exodia%20the%20Forbidden%20One',
-                 'Dark%20Hole']
+                 'Rude%20Kaiser', 'Silver%20Fang', 'Summoned%20Skull', 'Torike',
+                 'Zombie%20Warrior', 'Exodia%20the%20Forbidden%20One', 'Dark%20Hole',
+                 'Battle%20Steer', 'Beaver%20Warrior', 'Celtic%20Guardian',
+                 'Curse%20of%20Dragon', 'Dark%20Magician', 'Feral%20Imp',
+                 'Gaia%20The%20Fierce%20Knight', 'Giant%20Soldier%20of%20Stone', 'Griffore',
+                 'Horn%20Imp', 'Koumori%20Dragon', 'Left%20Arm%20of%20the%20Forbidden%20One',
+                 'Left%20Leg%20of%20the%20Forbidden%20One', 'Mammoth%20Graveyard', 'Mystical%20Elf',
+                 'Right%20Arm%20of%20the%20Forbidden%20One', 'Right%20Leg%20of%20the%20Forbidden%20One',
+                 'Rude%20Kaiser', 'Silver%20Fang', 'Summoned%20Skull', 'Torike',
+                 'Zombie%20Warrior', 'Exodia%20the%20Forbidden%20One', 'Dark%20Hole',
+                 'Battle%20Steer', 'Beaver%20Warrior', 'Celtic%20Guardian',
+                 'Curse%20of%20Dragon', 'Dark%20Magician', 'Feral%20Imp',
+                 'Gaia%20The%20Fierce%20Knight', 'Giant%20Soldier%20of%20Stone', 'Griffore',
+                 'Horn%20Imp', 'Koumori%20Dragon', 'Left%20Arm%20of%20the%20Forbidden%20One',
+                 'Left%20Leg%20of%20the%20Forbidden%20One', 'Mammoth%20Graveyard', 'Mystical%20Elf',
+                 'Right%20Arm%20of%20the%20Forbidden%20One', 'Right%20Leg%20of%20the%20Forbidden%20One',
+                 'Rude%20Kaiser', 'Silver%20Fang', 'Summoned%20Skull', 'Torike',
+                 'Zombie%20Warrior', 'Exodia%20the%20Forbidden%20One', 'Dark%20Hole']
 
 kaiba_monsters = [
-  'Battle%20Ox',
-  'Blue-Eyes%20White%20Dragon',
-  'Grappler',
-  'Gyakutenno%20Megami',
-  'Hitotsu-Me%20Giant',
-  'Judge%20Man',
-  'La%20Jinn%20the%20Mystical%20Genie%20of%20the%20Lamp',
-  'Mystic%20Horseman',
-  'Rude%20Kaiser',
-  'Ryu-Kishin%20Powered',
-  'Saggi%20the%20Dark%20Clown',
-  'Gadget%20Soldier',
-  'Hyozanryu',
-  'Vorse%20Raider',
-  'X-Head%20Cannon'
+  'Battle%20Ox', 'Blue-Eyes%20White%20Dragon', 'Grappler',
+  'Gyakutenno%20Megami', 'Hitotsu-Me%20Giant', 'Judge%20Man',
+  'La%20Jinn%20the%20Mystical%20Genie%20of%20the%20Lamp', 'Mystic%20Horseman',
+  'Rude%20Kaiser', 'Ryu-Kishin%20Powered', 'Saggi%20the%20Dark%20Clown',
+  'Gadget%20Soldier', 'Hyozanryu', 'Vorse%20Raider', 'X-Head%20Cannon', 'Dark%20Hole',
+  'Battle%20Ox', 'Blue-Eyes%20White%20Dragon', 'Grappler',
+  'Gyakutenno%20Megami', 'Hitotsu-Me%20Giant', 'Judge%20Man',
+  'La%20Jinn%20the%20Mystical%20Genie%20of%20the%20Lamp', 'Mystic%20Horseman',
+  'Rude%20Kaiser', 'Ryu-Kishin%20Powered', 'Saggi%20the%20Dark%20Clown',
+  'Gadget%20Soldier', 'Hyozanryu', 'Vorse%20Raider', 'X-Head%20Cannon', 'Dark%20Hole',
+  'Battle%20Ox', 'Blue-Eyes%20White%20Dragon', 'Grappler',
+  'Gyakutenno%20Megami', 'Hitotsu-Me%20Giant', 'Judge%20Man',
+  'La%20Jinn%20the%20Mystical%20Genie%20of%20the%20Lamp', 'Mystic%20Horseman',
+  'Rude%20Kaiser', 'Ryu-Kishin%20Powered', 'Saggi%20the%20Dark%20Clown',
+  'Gadget%20Soldier', 'Hyozanryu', 'Vorse%20Raider', 'X-Head%20Cannon', 'Dark%20Hole'
 ]
 
 for i in 0..yugi_monsters.length-1
