@@ -38,7 +38,8 @@ class Start extends Component {
     startGame(e) {
 
         this.setState({
-            selected_id: e.target.innerHTML.split(" ")[1]
+            selected_id: e.target.innerHTML.split(" ")[1],
+            game_been_clicked: true
         })
     }
 
@@ -59,7 +60,9 @@ class Start extends Component {
                         </div>
                     )
                 }) : ""}
-                <button className="btn btn-success" onClick={this.createGame.bind(this)}>Create Game</button>
+                {!this.state.game_been_clicked ?
+                    <button className="btn btn-success" onClick={this.createGame.bind(this)}>Create Game</button>
+                    : ""}
                 {this.state.selected_id ?
                     <Game
                         game_id={this.state.selected_id}

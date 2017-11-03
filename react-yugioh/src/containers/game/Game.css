@@ -14,3 +14,13 @@
 .no-padding {
     padding: 0;
 }
+
+.lifepoints {
+    color: yellow;
+    background-color: blue;
+    display: inline;
+}
+
+.padding-between-lifepoints{
+    margin: 15px;
+}

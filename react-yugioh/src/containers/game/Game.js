@@ -68,7 +68,7 @@ class Game extends Component {
         YugisModel.cards().then((res) => {
             let data = res.data
             let shuffle_deck1 = shuffle(data)
-            let hand1 = shuffle_deck1.slice(0,30)
+            let hand1 = shuffle_deck1.slice(0,5)
             let deck1 = shuffle_deck1.slice(5)
 
             this.setState({
@@ -82,7 +82,7 @@ class Game extends Component {
         KaibasModel.cards().then((res) => {
             let data = res.data
             let shuffle_deck2 = shuffle(data)
-            let hand2 = shuffle_deck2.slice(0,30)
+            let hand2 = shuffle_deck2.slice(0,5)
             let deck2 = shuffle_deck2.slice(5)
 
             this.setState({
@@ -540,17 +540,24 @@ class Game extends Component {
             if (this.state.turn === 'player1') {
                 if (e.target.className.split(' ')[1] === 'player1') {
                     let selected_monster = this.state.monster_field1.find((monster) => {
-                        return monster.image_url === e.target.src
+                        return monster.id == e.target.id.split('m')[1]
                     })
-
-                    this.setState({
-                        selected_attacker: selected_monster,
-                        attacker_selected: true,
-                        selected_has_attacked: selected_monster.has_attacked,
-                        selected_card: selected_monster,
-                    }, function () {
-                        console.log(this.state.selected_attacker, 'attacker selected player1')
-                    })
+                    console.log(selected_monster)
+                    if (selected_monster.position === 'attack') {
+                        this.setState({
+                            selected_attacker: selected_monster,
+                            attacker_selected: true,
+                            selected_has_attacked: selected_monster.has_attacked,
+                            selected_card: selected_monster,
+                        }, function () {
+                            console.log(this.state.selected_attacker, 'attacker selected player1')
+                        })
+                    }
+                    else {
+                        this.setState({
+                            selected_card: selected_monster
+                        })
+                    }
                 }
             }
 
@@ -558,28 +565,34 @@ class Game extends Component {
                 console.log(e.target.className.split(' ')[1], 'target classname')
                 if (e.target.className.split(' ')[1] === 'player2') {
                     let selected_monster = this.state.monster_field2.find((monster) => {
-                        return monster.image_url === e.target.src
+                        return monster.id == e.target.id.split('m')[1]
                     })
 
-                    this.setState({
-                        selected_attacker: selected_monster,
-                        attacker_selected: true,
-                        selected_has_attacked: selected_monster.has_attacked,
-                        selected_card: selected_monster,
-                    }, function () {
-                        console.log(this.state.selected_attacker, 'attacker selected player2')
-                    })
+                    if (selected_monster.position === 'attack') {
+                        this.setState({
+                            selected_attacker: selected_monster,
+                            attacker_selected: true,
+                            selected_has_attacked: selected_monster.has_attacked,
+                            selected_card: selected_monster,
+                        })
+                    }
+                    else {
+                        this.setState({
+                            selected_card: selected_monster
+                        })
+                    }
                 }
             }
         }
     }
 
     selectTarget(e) {
+        console.log(e.target.id.split('m')[1])
         if (this.state.phase === 2) {
             if (this.state.turn === 'player1') {
                 if (e.target.className.split(' ')[1] === 'player2') {
                     let selected_target = this.state.monster_field2.find((target) => {
-                        return target.image_url === e.target.src
+                        return target.id == e.target.id.split('m')[1]
                     })
 
                     this.setState({
@@ -597,7 +610,7 @@ class Game extends Component {
                     let selected_target = this.state.monster_field1.find((target) => {
                         console.log(target, 'this is the target')
                         console.log(this.state.monster_field1, 'monster field 1')
-                        return target.image_url === e.target.src
+                        return target.id == e.target.id.split('m')[1]
                     })
 
                     this.setState({
@@ -782,26 +795,50 @@ class Game extends Component {
         if (this.state.phase === 3) {
             if (this.state.turn === 'player1') {
                 let monster = this.state.monster_field1.find((monster) => {
+                    console.log(monster.image_url, 'monster.image_url')
                     return monster.image_url === e.target.src
                 })
-                this.setState({
-                    selected_monster: monster,
-                    monster_selected: true
-                }, function() {
-                    console.log(this.state.selected_monster, 'main phase 2 selected monster')
-                })
+                if (typeof monster !== 'undefined') {
+                    this.setState({
+                        selected_monster: monster,
+                        monster_selected: true
+                    })
+                }
+                else {
+                    let opposing = this.state.monster_field2.find((monster) => {
+                        console.log(monster.image_url, 'monster.image_url')
+                        return monster.image_url === e.target.src
+                    })
+                    if (typeof monster !== 'undefined') {
+                        this.setState({
+                            selected_card: opposing
+                        })
+                    }
+                }
             }
+
             else if (this.state.turn === 'player2') {
-                console.log('entering 2')
-                let monster = this.state.monster_field1.find((monster) => {
+                let monster = this.state.monster_field2.find((monster) => {
+                    console.log(monster.image_url, 'monster.image_url')
                     return monster.image_url === e.target.src
                 })
-                this.setState({
-                    selected_monster: monster,
-                    monster_selected: true
-                }, function() {
-                    console.log(this.state.selected_monster, 'main phase 2 selected monster')
-                })
+                if (typeof monster !== 'undefined') {
+                    this.setState({
+                        selected_monster: monster,
+                        monster_selected: true
+                    })
+                }
+                else {
+                    let opposing = this.state.monster_field1.find((monster) => {
+                        console.log(monster.image_url, 'monster.image_url')
+                        return monster.image_url === e.target.src
+                    })
+                    if (typeof monster !== 'undefined') {
+                        this.setState({
+                            selected_card: opposing
+                        })
+                    }
+                }
             }
         }
     }
@@ -961,7 +998,12 @@ class Game extends Component {
                     <div className="col-sm-3">
                         <h1>{winCondition ? <span>{this.state.winner} has won</span>: ""}</h1>
                         <h2>{this.state.turn} - Phase: {phase ? this.state.phase_name[this.state.phase] : this.state.phase_name[this.state.phase]}</h2>
-                        <h3>Lifepoints Player 1: {this.state.lifepoints1} --- Lifepoints Player 2: {this.state.lifepoints2}</h3>
+                        <div className="padding-between-lifepoints">
+                            <h2 className="lifepoints">P2: {this.state.lifepoints2}</h2>
+                        </div>
+                        <div className="padding-between-lifepoints">
+                            <h2 className="lifepoints">P1: {this.state.lifepoints1}</h2>
+                        </div>
                         <hr></hr>
                         <button className="btn btn-primary" onClick={this.endPhase.bind(this)}>End Phase</button>
                         {this.state.monster_selected && !this.state.selected_monster.spell_played && this.state.phase === 1
