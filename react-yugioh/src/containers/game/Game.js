@@ -5,6 +5,7 @@ import Board from '../../containers/board/Board.js'
 import './Game.css';
 import GamesModel from "../../models/Game";
 import Cable from 'actioncable'
+import {ProgressBar} from 'react-bootstrap'
 
 class Game extends Component {
     constructor(){
@@ -952,7 +953,7 @@ class Game extends Component {
             (this.state.phase === 2) &&
             (this.state.target_selected || this.state.monster_field1.length === 0 || this.state.monster_field2.length === 0)
         let winCondition = (this.state.winner.length !== 0)
-        console.log(this.state.selected_monster, 'monster selected stars')
+        console.log(this.state.lifepoints2, 'lp2')
         return(
             <div className="container-fluid">
                 <div className="row">
@@ -998,12 +999,10 @@ class Game extends Component {
                     <div className="col-sm-3">
                         <h1>{winCondition ? <span>{this.state.winner} has won</span>: ""}</h1>
                         <h2>{this.state.turn} - Phase: {phase ? this.state.phase_name[this.state.phase] : this.state.phase_name[this.state.phase]}</h2>
-                        <div className="padding-between-lifepoints">
-                            <h2 className="lifepoints">P2: {this.state.lifepoints2}</h2>
-                        </div>
-                        <div className="padding-between-lifepoints">
-                            <h2 className="lifepoints">P1: {this.state.lifepoints1}</h2>
-                        </div>
+                        <h3>Player 2 Lifepoints: {this.state.lifepoints2}</h3>
+                        <ProgressBar active now={this.state.lifepoints2/8000*100} />
+                        <h3>Player 1 Lifepoints: {this.state.lifepoints1}</h3>
+                        <ProgressBar active now={this.state.lifepoints1/8000*100} />
                         <hr></hr>
                         <button className="btn btn-primary" onClick={this.endPhase.bind(this)}>End Phase</button>
                         {this.state.monster_selected && !this.state.selected_monster.spell_played && this.state.phase === 1

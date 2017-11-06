@@ -50,19 +50,29 @@ class Start extends Component {
     render() {
 
         return (
-            <div>
-            {!this.state.game_been_clicked ?
-                this.state.available_games.map((game) => {
-                    return(
-                        <div>
-                            <button className="btn btn-primary" onClick={this.startGame.bind(this)}>Game {game.id}</button>
-                            <button className="btn btn-danger" onClick={() => this.deleteGame(game.id)}>Delete</button>
-                        </div>
-                    )
-                }) : ""}
+            <div className="container">
+                <div className="row">
+                    <div className="col-sm-2 col-sm-offset-5 background-header">
+                    </div>
+                </div>
                 {!this.state.game_been_clicked ?
-                    <button className="btn btn-success" onClick={this.createGame.bind(this)}>Create Game</button>
-                    : ""}
+                    <div className="row">
+                        <div className="col-sm-2 col-sm-offset-5">
+                            <button className="btn btn-success" onClick={this.createGame.bind(this)}>Create Game</button>
+                        </div>
+                    </div>
+                : ""}
+                {!this.state.game_been_clicked ?
+                    this.state.available_games.map((game) => {
+                        return(
+                            <div className="row">
+                                <div className="col-sm-2 col-sm-offset-5">
+                                    <button className="btn btn-primary" onClick={this.startGame.bind(this)}>Game {game.id}</button>
+                                    <button className="btn btn-danger" onClick={() => this.deleteGame(game.id)}>Delete</button>
+                                </div>
+                            </div>
+                        )
+                }) : ""}
                 {this.state.selected_id ?
                     <Game
                         game_id={this.state.selected_id}
