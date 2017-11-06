@@ -16,7 +16,6 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-config.assets.initialize_on_precompile = false
 
 module Yugioh
   class Application < Rails::Application
@@ -29,6 +28,7 @@ module Yugioh
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+    config.assets.initialize_on_precompile = false
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
