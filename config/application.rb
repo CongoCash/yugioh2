@@ -28,7 +28,7 @@ module Yugioh
 
     # Don't generate system test files.
     config.generators.system_tests = nil
-    config.assets.initialize_on_precompile = false
+    config.assets.compile = true
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
