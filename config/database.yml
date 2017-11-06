@@ -24,6 +24,7 @@ default: &default
 development:
   <<: *default
   database: yugioh_development
+  host: ""
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -82,4 +83,5 @@ production:
   <<: *default
   database: yugioh_production
   username: yugioh
+  host: ""
   password: <%= ENV['YUGIOH_DATABASE_PASSWORD'] %>
