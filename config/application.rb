@@ -31,7 +31,7 @@ module Yugioh
     config.assets.compile = true
 
     config.action_dispatch.default_headers = {
-      'Access-Control-Allow-Origin' => 'https://sleepy-forest-26880.herokuapp.com',
+      'Access-Control-Allow-Origin' => 'http://frozen-fjord-74866.herokuapp.com',
       'Access-Control-Request-Method' => %w{GET POST OPTIONS}.join(",")
     }
 
