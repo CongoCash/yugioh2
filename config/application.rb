@@ -31,7 +31,7 @@ module Yugioh
     config.assets.compile = true
 
     config.action_dispatch.default_headers = {
-      'Access-Control-Allow-Origin' => 'http://my-web-service-consumer-site.com',
+      'Access-Control-Allow-Origin' => 'https://frozen-fjord-74866.herokuapp.com/',
       'Access-Control-Request-Method' => %w{GET POST OPTIONS}.join(",")
     }
 
