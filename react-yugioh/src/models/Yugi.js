@@ -3,7 +3,7 @@ import axios from 'axios'
 class YugisModel {
 
     static cards(){
-        let request = axios.get("http://localhost:3000/api/yugi.json")
+        let request = axios.get("https://sleepy-forest-26880.herokuapp.com/api/yugi.json")
         return request
     }
 

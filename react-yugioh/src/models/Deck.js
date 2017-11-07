@@ -2,7 +2,7 @@ import axios from 'axios'
 
 class DecksModel {
     static decks(){
-        let request = axios.get("http://localhost:3000/api/decks.json")
+        let request = axios.get("https://sleepy-forest-26880.herokuapp.com/api/decks.json")
         return request
     }
 

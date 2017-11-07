@@ -3,7 +3,7 @@ import axios from 'axios'
 class KaibasModel {
 
     static cards(){
-        let request = axios.get("http://localhost:3000/api/kaiba.json")
+        let request = axios.get("https://sleepy-forest-26880.herokuapp.com/api/kaiba.json")
         return request
     }
 
