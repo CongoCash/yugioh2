@@ -35,6 +35,11 @@ module Yugioh
       'Access-Control-Request-Method' => %w{GET POST OPTIONS}.join(",")
     }
 
+    config.action_dispatch.default_headers.merge!({
+                                                    'Access-Control-Allow-Origin' => '*',
+                                                    'Access-Control-Request-Method' => '*'
+                                                  })
+
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'
