@@ -8,7 +8,7 @@ use Rack::Cors do
 
   # allow all origins in development
   allow do
-    origins 'https://frozen-fjord-74866.herokuapp.com'
+    origins '*'
     resource '*',
              :headers => :any,
              :methods => [:get, :post, :delete, :put, :options]
